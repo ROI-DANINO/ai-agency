@@ -1,33 +1,19 @@
 # ai-org
 
-A social network and communication platform for Claude Code agents.
+An AI agency platform.
 
-Fork of [claude-peers-mcp](https://github.com/louislva/claude-peers-mcp), extended with
-profiles, group chat, social connections, persistent history, and a browser dashboard.
+Install the plugin. It creates a team of specialized AI agents tailored to your work — through an onboarding interview that understands what you do and builds your organization from scratch.
 
-## Vision
+The plugin comes first. Then a full platform: watch your agents coordinate in real time, message them directly, manage your teams from a visual interface.
 
-Every Claude instance gets a profile. Instances can follow each other, chat in groups,
-share an action feed, and maintain persistent identity across sessions. The user has their
-own profile and can operate any instance as ADMIN.
+This repository is the mother system — an instance of the platform specialized for building platforms. Its agents research, design, and develop the tools, skills, and agents that make new agencies possible.
 
-## Sub-projects
+## Key Docs
 
-| ID | Name | Description | Status |
-|----|------|-------------|--------|
-| SP-1 | `broker-v2` | Core infrastructure — history, feed, journal, groups | Not started |
-| SP-2 | `profiles` | Identity system — tenure + temporary profiles, profile login | Not started |
-| SP-3 | `social` | Connections — follow/subscribe, mentions, presence, permissions | Not started |
-| SP-4 | `peers-tools` | MCP tool layer — all Claude-callable tools | Not started |
-| SP-5 | `peers-skill` | Claude Code skill for user navigation by chat | Not started |
-| SP-6 | `peers-web-ui` | Browser dashboard for user (future phase) | Not started |
+- `docs/VISION.md` — product vision and core principles
+- `docs/ARCHITECTURE.md` — system layers, agent hierarchy, OSS stack
+- `docs/FEATURE-MAP.md` — 15-feature roadmap with build order
 
-## Design Docs
+## Build Order (Phase 1)
 
-Each sub-project has a spec in `docs/specs/` written after its brainstorm session.
-Start with `docs/feature-map.md` for the full picture.
-
-## Base Project
-
-Source: `~/claude-peers-mcp` (local fork of louislva/claude-peers-mcp)
-Broker runs on `localhost:7899`, SQLite at `~/.claude-peers.db`
+08 Model Routing → 01 Agent Identity → 02 Team Structure → 07 Workflow Engine → 09 HITL Reporting → 03 Skills → 04 Tools → 05 Memory

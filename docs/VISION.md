@@ -31,7 +31,7 @@ A native desktop application — like Claude Desktop or Cursor — that wraps bo
 
 ## Core Principles
 
-**Model agnostic.** Works with any LLM via LiteLLM + OpenRouter. Claude, Qwen, Nemotron, Kimi, GPT-4o — the system routes to the right model for the right job. No vendor lock-in.
+**Model agnostic.** Works with any LLM via OpenRouter. Claude, Qwen, Kimi, GLM, DeepSeek — the system routes to the right model for the right job. No vendor lock-in.
 
 **Human in the loop.** The Orchestrator never makes final calls. Agents bring decisions, blockers, and structured reports to the human. The human decides. This is not optional.
 
@@ -50,7 +50,7 @@ A native desktop application — like Claude Desktop or Cursor — that wraps bo
 | Tier | Models | Use For |
 |---|---|---|
 | Tier 1 — Free/Cheap | GLM, Kimi, Qwen | Long-context research, bulk tasks, drafts |
-| Tier 2 — Mid | Nemotron, Claude Haiku, GPT-4o-mini | Team leads, coordination, review |
+| Tier 2 — Mid | Claude Haiku, GPT-4o-mini | Team leads, coordination, review |
 | Tier 3 — Premium | Claude Sonnet/Opus, GPT-4o | Complex coding, critical logic, final QA |
 
 Routing is automatic based on task type. The human can override.
