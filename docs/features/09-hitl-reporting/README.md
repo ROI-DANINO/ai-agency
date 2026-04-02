@@ -1,7 +1,7 @@
 # Feature 09 — HITL Reporting (Human-in-the-Loop)
 
 **Status:** PLACEHOLDER  
-**Phase:** 2 — Platform  
+**Phase:** 1 — Foundation (moved from Phase 2 — HITL is the core interaction loop)  
 **Layer:** Cross-layer  
 **Priority:** Critical  
 **Depends on:** 07 Workflow Engine

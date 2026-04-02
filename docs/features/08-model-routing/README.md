@@ -97,4 +97,21 @@ None. This is infrastructure that everything else depends on.
 ---
 
 ## Session Notes
-<!-- Fill during design/build session -->
+
+### Orient — 2026-04-02
+All 7 open questions identified. 4 answered, 3 parked for design phase.
+
+**Answered:**
+- LiteLLM deployment: local process (sidecar) for Phase 1
+- Cost tracking: Supabase
+- API keys: .env Phase 1, Infisical Phase 2
+- Per-workspace: single workspace Phase 1; telemetry is a future research track
+
+**Parked for Design Phase:**
+- Mid-task tier escalation mechanism (user wants to understand options first)
+- Fallback strategy (leaning same-tier first then escalate — not locked)
+- Human override mechanism (CLI flag + skill + web UI all seem relevant)
+
+**Notes:**
+- Remove "Manus" from tier table — it's an agent platform, not a model
+- Present escalation and override as options with examples, not just a recommendation
