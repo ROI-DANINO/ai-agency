@@ -81,6 +81,24 @@ None. This is the root.
 
 ## Session Notes
 
+### Chat C Design — 2026-04-04
+
+**Stable ID mechanism:** Filename-based slugs. Tenure agents have stable slug-based IDs (e.g., `dev-lead`, `pm-lead`) defined in `.claude/agents/` markdown files. The slug is the stable identity. The NATS KV peer_id is the runtime handle only.
+
+**Profile config storage:** Flat file + DB hybrid.
+- `.claude/agents/<slug>.md` — the agent definition (role, model tier, skills, tools). Human-readable, version-controlled.
+- Supabase Agent model — runtime state (status, last_active, dismissed_at, handoff_ref). DB is source of truth for live state; flat file is source of truth for identity definition.
+
+**claude-peers-mcp fork strategy:**
+- Retain full MCP surface: `list_peers`, `send_message`, `check_messages`, `set_summary`
+- Replace SQLite broker with NATS KV: `peer_id → agent_profile_slug` mapping stored in NATS KV bucket `agent-registry`
+- Cherry-pick PR #24 (worktree fix) + PR #7 (SendMessage fix) from upstream before diverging
+- Seam: agents register via MCP tool calls; NATS KV maps ephemeral peer_id to stable profile slug; Supabase holds full profile state
+
+**Status:** Feature 01 all chats locked → HARMONY
+
+---
+
 ### Chat B Design — 2026-04-03
 **Doc:** [chat-b-profile-schema.md](chat-b-profile-schema.md)
 
