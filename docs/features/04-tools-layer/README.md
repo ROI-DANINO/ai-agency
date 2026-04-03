@@ -61,12 +61,20 @@ Tools are assigned to agents with scope rules. When an agent is assigned a data 
 
 ---
 
+## OSS Stack
+
+- **agentic-ai-platform schema** (fork) — `MCPTool`, `ToolVersion`, `ToolDeployment`, `ToolTestRun` models adopted wholesale. Immutable versioning (never mutate published versions), 3-tier deployment (DEV/STAGING/PROD), test run audit trail. — Seam: Prisma schema; platform builds tool CRUD and assignment logic on top.
+- **FastMCP** — Python MCP server builder (~50 lines to expose a tool). — Seam: MCP Plugin Bridge (Feature 11) uses FastMCP to expose platform tools to Claude Code and other runtimes.
+- **Docker exec** — sandbox for Python-based code tools. Known, platform-authored tools run in Docker exec isolation. — Seam: tool handler invokes Docker exec; stdout/stderr returned as tool result.
+- **Deno V8 isolates** — sandbox for JavaScript/TypeScript tools. Fast (~10ms start), no full Linux environment needed, sufficient for JS tool execution. — Seam: Deno subprocess per tool invocation; no shared process state.
+- **E2B** (Phase 2 upgrade path) — cloud Firecracker microVMs for full Linux environments. Only if the platform adds untrusted/user-supplied code execution. Do NOT add Phase 1. vm2: DO NOT USE (deprecated, critical CVEs).
+
 ## OSS & References
 
 - **Reference:** `agentic-ai` design spec — dual-mode MCP tool builder, testing, deployment lifecycle
 - **Reference:** `agentic-ai-platform` Prisma schema — MCPTool, ToolVersion, ToolDeployment, ToolTestRun models
 - **OSS:** FastMCP — Python MCP server builder
-- **OSS:** vm2 / Deno — sandboxed code execution options
+- **OSS:** Docker exec / Deno V8 isolates — sandboxed code execution (vm2 is deprecated with critical CVEs — do not use)
 
 ---
 

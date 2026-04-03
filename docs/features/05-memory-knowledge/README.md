@@ -73,13 +73,20 @@ Shared knowledge across agents uses pgvector — semantic search over documents 
 
 ---
 
+## OSS Stack
+
+- **Mem0** (self-hosted) — extraction pipeline, deduplication, scoped retrieval on top of any vector backend. Backed by Supabase Postgres (pgvector) — reuses the existing DB, no separate vector store needed. — Seam: agents call `memory.add(text, user_id=agent_id)` at session-end; `memory.search(query, user_id=agent_id)` at session-start. LiteLLM handles the extraction model (model-agnostic). Docker Compose: 3 containers (mem0 API on :8888, postgres/pgvector, neo4j).
+- **Supabase pgvector** — 1536-dim embeddings, RBAC-filtered retrieval for shared knowledge. — Seam: Mem0 uses this as its vector backend; `KnowledgeChunk` model in Prisma schema; `search_memory` / `save_memory` tools auto-injected when agent is assigned a data source.
+- **aios 3-tier memory pattern** (reference, not fork) — proven structure: context/ (permanent ground truth), memory/ (curated cross-session), data/ (ephemeral session). Implement this file layout in the CLI layer. — Seam: briefing pack generator skill assembles role-scoped context from these files.
+- **Graphiti/Zep** (Phase 2 upgrade path) — temporal knowledge graph for fact supersession ("what was true at time T"). Adopt only if agents need temporal reasoning beyond what Mem0 provides. Self-hosting requires Neo4j.
+
 ## OSS & References
 
 - **Reference:** `aios` — full memory system: MEMORY.md, session-close, context-clean, memory-audit, briefing-pack concept
 - **Reference:** `stam/unified-efficiency-layer-design.md` — briefing-pack design with role-to-context mapping table
 - **Reference:** `agentic-ai` design spec — shared memory via pgvector, search_memory / save_memory
+- **OSS:** Mem0 (self-hosted) — extraction + deduplication + scoped retrieval on Supabase pgvector
 - **OSS:** Supabase pgvector — 1536-dim embeddings, RBAC-filtered retrieval
-- **OSS:** sqlite-vec — lightweight alternative for CLI-only mode
 
 ---
 

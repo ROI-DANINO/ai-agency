@@ -96,12 +96,27 @@ RESPOND
 
 ---
 
+## OSS Stack
+
+- **LangGraph `interrupt()`** — the HITL pause mechanism. When a workflow reaches a human gate, `interrupt(payload)` serializes the graph state to SQLite and returns. The platform formats the `payload` as a Decision Report and forwards to n8n. — Seam: the interrupt payload IS the Decision Report content; `thread_id` is the persistent handle used to resume.
+- **n8n** (self-hosted) — owns all notification routing, pause state management, and human response collection. The platform emits a Decision Report payload to an n8n webhook; n8n routes to the right channel (Telegram, Slack, email, CLI), manages the Wait Node pause state, and POSTs the approval result back to the platform's callback handler. — Seam: ~100 lines of custom code total (HITL pause tool in LangGraph + callback handler that calls `Command(resume=...)`).
+- **LangGraph `Command(resume=value)`** — resumes the paused graph after n8n delivers the human's decision. Called by the platform's callback handler. — Seam: `graph.invoke(Command(resume=decision), config={"configurable": {"thread_id": task_id}})`.
+- **Telegram Bot API** — preferred Phase 1 notification channel (mobile-first, simple bot API). Configured as an n8n channel — no custom code needed.
+
+**n8n HITL pattern (Wait Node + Webhook):**
+1. LangGraph hits `interrupt()` → formats Decision Report → POST to n8n webhook
+2. n8n: sends notification to human (Telegram/Slack/email) with decision context + approve link
+3. n8n Wait Node pauses; state persisted in n8n's PostgreSQL
+4. Human clicks approve/reject → GET/POST to n8n resume webhook
+5. n8n POSTs result to platform callback endpoint
+6. Platform calls `Command(resume=decision)` → LangGraph resumes
+
 ## OSS & References
 
-- **OSS:** Telegram Bot API — simple, mobile-first, easy to set up
-- **OSS:** n8n — can handle notification routing (email, Slack, webhook) without custom code
+- **OSS:** LangGraph 1.0 — `interrupt()` / `Command(resume=...)` for HITL pause/resume
+- **OSS:** n8n (self-hosted) — notification routing, pause state, human response collection
+- **OSS:** Telegram Bot API — Phase 1 notification channel (configured in n8n, no custom code)
 - **Reference:** `ai-team` — daily briefing format, conflict resolution protocol
-- **Reference:** The architecture prompt provided — "executive decision reports" concept
 
 ---
 

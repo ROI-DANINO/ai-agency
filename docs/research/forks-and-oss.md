@@ -16,38 +16,67 @@ Custom code is a liability. Every line you write is a line you maintain. Fork on
 
 ### 1. `claude-peers-mcp`
 **Source:** `~/claude-peers-mcp` (local) / `github.com/louislva/claude-peers-mcp`  
-**What we take:** The broker daemon (SQLite-backed, REST API on localhost:7899), stable identity mechanism, message passing  
-**Why fork, not install:** The broker needs significant extension for this platform — stable tenure profiles, feed/journal, group channels, cross-instance identity. The upstream version is not stable enough for production use.  
-**Known issues to fix before using:**
-- Repo scope broken with git worktrees (#23)
-- Built-in `SendMessage` conflict (#6)
-- Unstable peer IDs (#16)
+**What we take:** The MCP surface (list_peers, send_message, check_messages, set_summary) and peer registration model  
+**Why fork, not install:** The upstream broker is SQLite-backed and fragile (unstable peer IDs, no group channels, no structured message types, no message TTL). We need to extend it significantly.  
+**Fork changes:**
+- Replace SQLite broker with NATS.io + JetStream as the messaging backend (Feature 06)
+- Add stable identity mapping: `(peer_id_session, agent_profile_id)` → persistent agent identity survives restarts
+- Add group channels: `channels` table with membership for team broadcasts
+- Add structured message payloads: `message_type TEXT` + `payload JSON` columns
+- Add message acknowledgment: `reply_to_id` FK for approval threads
+- Add message TTL: `expires_at` + cleanup job
+- Add notification routing: Telegram/Slack for HITL events (Feature 09)
+- Cherry-pick PR #24 (worktree fix) and PR #7 (SendMessage conflict fix) from upstream
 
-**Effort:** Medium — fork and extend the broker, stabilize identity mechanism, add profile types.
+**Known bugs to fix:**
+- Repo scope broken with git worktrees (#23 / PR #24)
+- Built-in `SendMessage` conflict (#6 / PR #7)  
+- Unstable peer IDs (#16) — solved by moving identity to ai-org database
+
+**Effort:** Medium — fork, replace broker with NATS, stabilize identity mechanism, add extensions.
 
 ---
 
 ### 2. `agentic-ai-platform`
 **Source:** `~/Desktop/Projects/agentic-ai-platform`  
-**What we take:** Prisma schema (24 models, complete), NextAuth v5 setup, Vitest + React Testing Library config, workspace scoping pattern, Prisma singleton  
+**What we take:** Prisma schema (24 models), NextAuth v5 setup, Vitest + React Testing Library config, workspace scoping pattern, Prisma singleton, AGENTS.md coding conventions  
 **Why fork, not start fresh:** The hardest parts are done — data model, auth, testing infra. Starting from scratch means rebuilding 40+ hours of work that's already solid.  
-**What to throw away:** The boilerplate landing page, any UI that doesn't match the vision  
-**What to keep as-is:** Everything in `prisma/schema.prisma`, `src/lib/auth.ts`, `src/lib/db.ts`, `vitest.config.ts`, `AGENTS.md` coding conventions
+**What to throw away:** Boilerplate landing page, any UI that doesn't match the vision  
+**What to keep as-is:** Everything in `prisma/schema.prisma`, `src/lib/auth.ts`, `src/lib/db.ts`, `vitest.config.ts`  
+**What to add to schema:**
+- `rank` field on Agent: `admin | operator | lead | agent` (Feature 01/02)
+- `TaskDependency` table: `(taskId, dependsOnTaskId)` for DAG execution (Feature 07)
+- `DecisionReport` + `ApprovalRequest` models for explicit HITL state (Feature 09)
+- Task states: `AWAITING_HUMAN`, `APPROVED`, `REJECTED` (Feature 07)
 
 **Effort:** Low — fork and build on top. Don't refactor what works.
 
 ---
 
+### 3. Paperclip (Secondary Investigation)
+**Source:** `github.com/paperclipai/paperclip`  
+**Stars:** 46,100 | License: MIT  
+**What it is:** Self-hosted AI agent orchestration platform. Node.js + TypeScript + React. Models a company as an org chart of AI agents with goals, budgets, tasks, and HITL governance.  
+**Why a fork candidate:** Purpose-built for the exact use case — agent teams with human oversight. MIT licensed, data in Postgres.  
+**Status:** Investigate before committing to agentic-ai-platform fork as primary for Feature 12. Specifically: can Paperclip's React UI + Postgres schema be decoupled from its execution runtime (heartbeats, task checkout)?  
+**If yes:** Paperclip's UI layer may be a better fork target than agentic-ai-platform for Feature 12.  
+**If no:** Use agentic-ai-platform as the dashboard shell (Feature 12) and reference Paperclip's schema design.
+
+**Effort:** Unknown until source is read.
+
+---
+
 ## What to Install (No Fork)
 
-| Tool | Install Command | Why Not Fork |
+| Tool | Install | Why Not Fork |
 |---|---|---|
 | **LiteLLM** | `pip install litellm` | Stable, well-maintained, no customization needed |
-| **CrewAI** | `pip install crewai` | Use as framework, not fork |
-| **LangGraph** | `pip install langgraph` | Use as framework |
+| **LangGraph 1.0** | `pip install langgraph` | Use as framework; interrupt/Command API is the seam |
+| **NATS.io** | `brew install nats-server` or Docker | Single binary; extend via subject schema, not code |
+| **Mem0** | Docker Compose (3 containers) | Use as-is; seam is memory.add() + memory.search() |
 | **FastMCP** | `pip install fastmcp` | MCP server in ~50 lines |
-| **n8n** | Docker: `docker run n8nio/n8n` | Self-hosted, no code changes needed |
-| **Supabase** | Managed cloud or self-hosted | Use the service, don't fork |
+| **n8n** | Docker Compose (postgres + n8n + runner) | Configure, don't fork; seam is webhook API |
+| **Supabase** | Managed cloud or self-hosted | Use the service |
 | **shadcn/ui** | `npx shadcn@latest add` | UI components, use as-is |
 | **Ollama** | `curl -fsSL https://ollama.ai/install.sh` | Local models, no fork needed |
 
@@ -55,15 +84,17 @@ Custom code is a liability. Every line you write is a line you maintain. Fork on
 
 ## What to Build Custom (Minimal)
 
-| Component | What to Build | Estimated Size |
-|---|---|---|
-| **MCP Plugin Bridge** | FastMCP server exposing platform capabilities | ~200 lines Python |
-| **Briefing Pack Generator** | Skill that assembles role-scoped context snapshots | ~100 lines markdown skill |
-| **HITL Pause/Resume** | CrewAI custom tool that waits for human input | ~100 lines Python |
-| **Cost Tracker** | LiteLLM callback that logs token cost per run | ~50 lines Python |
-| **Platform Glue** | CLI that starts LiteLLM + broker + agent runtime together | ~100 lines shell/Python |
+| Component | What to Build | Est. Size | Feature |
+|---|---|---|---|
+| **MCP Plugin Bridge** | FastMCP server exposing platform capabilities to Claude Code | ~200 lines Python | 11 |
+| **HITL Pause Tool** | LangGraph node that calls interrupt() and formats Decision Report | ~50 lines Python | 09 |
+| **HITL Callback Handler** | Webhook receiver that calls Command(resume=...) after n8n approval | ~50 lines Python | 09 |
+| **Briefing Pack Generator** | Skill that assembles role-scoped context snapshots | ~100 lines markdown skill | 05 |
+| **Cost Tracker** | LiteLLM callback that logs token cost per run to AuditLog | ~50 lines Python | 08 |
+| **Platform Glue** | CLI that starts NATS + LangGraph + Mem0 + n8n together | ~100 lines shell/Python | all |
+| **NATS Subject Schema** | Subject hierarchy definition for agent topology | ~30 lines config | 06 |
 
-Total estimated custom code: **~550 lines** across 5 components. Everything else is configuration and wiring.
+Total estimated custom code: **~580 lines** across 7 components. Everything else is configuration and wiring.
 
 ---
 
@@ -75,19 +106,39 @@ Total estimated custom code: **~550 lines** across 5 components. Everything else
 | `ai-team` | Reference for agent role definitions, not a codebase. Copy agent markdown files, not a fork. |
 | `aios` | Personal system with different goals. Study patterns, don't fork. Reimplement ideas cleanly. |
 | `ai-org` | This IS the new project. Build here, don't fork. |
+| Flowise | Visual flow builder — wrong shape for agent management platform. |
+| Dify | "Build an LLM app" paradigm — constrains architecture, doesn't accelerate it. License has non-Apache terms. |
+| Temporal | Right for Phase 3 multi-machine; overkill for Phase 1 local. Note migration path. |
+| E2B | Cloud-only managed sandbox; introduces cloud dependency for Phase 1 tool execution. Revisit Phase 2. |
 
 ---
 
 ## Reference-Only Projects
 
-These are studied for patterns and ideas, not forked:
-
 | Project | What to Extract |
 |---|---|
-| `aios` | Skills system patterns, 3-tier memory model, dev pod design, session lifecycle |
-| `ai-team` | 14 agent role definitions (BMAD personas), conflict resolution protocol, daily briefing format |
-| `agentic-ai` | Full UX spec for web platform, skills bank design, dual-mode tool builder |
-| `stam/unified-efficiency-layer` | Briefing pack design, team health audit, role-to-context mapping |
+| `aios` | 3-tier memory model, skills frontmatter format, briefing pack design, session lifecycle, skills-map.md pattern |
+| `ai-team` | 14 agent role definitions (BMAD personas), conflict resolution protocol, daily briefing format, Orchestrator rules |
+| `agentic-ai` | Full UX spec for web platform, skills bank design, dual-mode tool builder concept |
+| `hermes-integration` | Execution engine pattern, memory bridge design, tool delegation pattern, handoff artifacts |
+| `pi_agency` | Subagent delegation model, workflow routing logic, specialist role structure |
+
+---
+
+## OSS Decisions Per Feature
+
+| Feature | OSS Tool | Seam / How it connects |
+|---|---|---|
+| **01 Agent Identity** | claude-peers-mcp fork + NATS KV | Peer IDs are ephemeral; stable identity in ai-org DB; NATS KV maps session→profile |
+| **02 Team Structure** | agentic-ai-platform Prisma schema | Workspace→Cluster→Group→Agent hierarchy; adopt immutable versioning + ResourceScopeBinding |
+| **03 Skills System** | aios patterns (file-based) | Markdown + YAML frontmatter; skills-map.md as registry; handoff artifacts for chaining |
+| **04 Tools Layer** | agentic-ai-platform MCPTool schema + Docker exec | Schema adopted wholesale; Docker exec for sandbox; Deno V8 for JS tools |
+| **05 Memory** | Mem0 + Supabase pgvector | Agents call memory.add() at session-end, memory.search() at start; LiteLLM for extraction model |
+| **06 Agent Comms** | NATS.io + JetStream | Subject schema = agent topology; agent.{id}.inbox for DM; agent.broadcast.* for fan-out |
+| **07 Workflow Engine** | LangGraph 1.0 + AsyncSqliteSaver | StateGraph = task DAG; interrupt() for HITL pause; thread_id = task/session handle |
+| **09 HITL Reporting** | LangGraph interrupt() + n8n | LangGraph pauses and emits payload → n8n webhook → notifies → callback resumes LangGraph |
+| **12 Web Platform** | agentic-ai-platform fork (primary) | Prisma schema + NextAuth + Vitest; investigate Paperclip as alternative shell |
+| **08 Model Routing** | LiteLLM | Universal API; routing rules in config; no code changes to swap models — see feature 08 README |
 
 ---
 
@@ -95,8 +146,15 @@ These are studied for patterns and ideas, not forked:
 
 | Decision | Rationale | Date |
 |---|---|---|
-| Fork claude-peers-mcp | Core broker is good, but needs significant extension for profiles/feeds/groups | 2026-04-02 |
+| Fork claude-peers-mcp | Core broker is good, but needs significant extension for NATS backend, profiles, group channels | 2026-04-02 |
 | Fork agentic-ai-platform | Schema + auth already done, no point rebuilding | 2026-04-02 |
 | Use LiteLLM (not direct OpenRouter API) | Model-agnostic from day one, swap models without code changes | 2026-04-02 |
-| Start with CrewAI, migrate to LangGraph | Faster initial build, upgrade when workflow complexity demands it | 2026-04-02 |
-| Self-hosted n8n for integrations | Avoids building custom webhook/notification infra | 2026-04-02 |
+| LangGraph over CrewAI | StateGraph + interrupt() maps exactly to task DAG + HITL; CrewAI is simpler but LangGraph 1.0 is now stable | 2026-04-04 |
+| NATS.io over Slack alternatives | Purpose-built messaging, subject hierarchy = agent topology, single binary, MCP server exists, replaces claude-peers broker cleanly | 2026-04-04 |
+| Mem0 over raw pgvector | Extraction pipeline + deduplication + scoped retrieval is non-trivial to build; Mem0 provides all of it via 3-line API | 2026-04-04 |
+| Docker exec over E2B for tool sandbox | Phase 1 tools are platform-authored (known threat model); cloud dependency unjustified; E2B upgrade path for untrusted code | 2026-04-04 |
+| n8n for HITL notifications | Already in stack; owns all notification routing; HITL webhook pattern is native; ~100 lines of custom glue code | 2026-04-04 |
+| Skip Flowise/Dify for web platform | Wrong paradigm (flow builder / LLM app vs. agent management platform); forking = discarding most of what they are | 2026-04-04 |
+| Investigate Paperclip before committing Feature 12 | 46K stars, MIT, purpose-built for agent teams; check if UI layer is decoupable from runtime | 2026-04-04 |
+| Temporal: note migration path for Phase 3 | Battle-hardened durable workflows for multi-machine; overkill for Phase 1 single-machine local | 2026-04-04 |
+| vm2: DO NOT USE | Deprecated, has critical CVEs | 2026-04-04 |

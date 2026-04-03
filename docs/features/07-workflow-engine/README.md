@@ -67,13 +67,19 @@ Human approval gates are built into the DAG. Certain task types always require h
 
 ---
 
+## OSS Stack
+
+- **LangGraph 1.0** — StateGraph abstraction maps directly to the task DAG. Nodes are agent calls or Python functions; conditional edges handle routing; `interrupt()` provides HITL pause anywhere inside a node; `Command(resume=value)` resumes after human decision. — Seam: Feature 01 injects agent configs into node factories at graph build time; `thread_id` maps to a task/session context; state passes typed dicts conforming to the platform's AgentState schema.
+- **AsyncSqliteSaver** (LangGraph checkpointer) — persists graph state to SQLite for Phase 1 local-only use. Zero additional infrastructure. Upgrade to `AsyncPostgresSaver` (Supabase) in Phase 2. — Seam: `thread_id` is the persistent handle; state survives process restarts.
+- **agentic-ai-platform Task schema** (fork) — `Task` model with state machine adopted; add `AWAITING_HUMAN`, `APPROVED`, `REJECTED` states; add `TaskDependency(taskId, dependsOnTaskId)` table for DAG. — Seam: LangGraph `thread_id` maps to `Task.id`; task state transitions mirror LangGraph graph state.
+- **Temporal** (Phase 3 migration path) — durable workflow execution for multi-machine deployments. Workflows survive crashes and restarts via event sourcing. Note this migration now; do not build toward it. — Exit cost from LangGraph: rewrite graph definitions as `@workflow.defn` classes; no proprietary state migration.
+
 ## OSS & References
 
-- **OSS:** CrewAI — high-level multi-agent orchestration, less code
-- **OSS:** LangGraph — stateful agent graphs, more control
+- **OSS:** LangGraph 1.0 — stateful agent graphs with first-class HITL interrupt/resume (confirmed over CrewAI)
 - **Reference:** `aios` — dev pod pattern (Planner → Scheduler → Coder/Tester/Reviewer with DAG)
 - **Reference:** `ai-team` — orchestrator protocol, sub-agent dispatch, daily briefing format
-- **Reference:** `agentic-ai-platform` Prisma schema — Task model with state machine (8 states)
+- **Reference:** `agentic-ai-platform` Prisma schema — Task model with state machine
 
 ---
 

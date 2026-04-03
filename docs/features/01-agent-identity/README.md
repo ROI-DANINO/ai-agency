@@ -59,11 +59,17 @@ Identity is managed by a broker (forked from `claude-peers-mcp`) — a local SQL
 
 ---
 
+## OSS Stack
+
+- **claude-peers-mcp fork (NATS-backed)** — MCP surface (list_peers, send_message, check_messages) retained; SQLite broker replaced with NATS.io + JetStream. NATS KV stores the peer-to-profile mapping: `(peer_id_session → agent_profile_id)` so stable identity survives session restarts. Cherry-pick PR #24 (worktree fix) + PR #7 (SendMessage fix). — Seam: agents register via MCP; NATS KV maps ephemeral session ID to persistent profile in ai-org DB.
+- **agentic-ai-platform Agent model** (fork) — `Agent(id, slug, display_name, rank, process_model, status, groupId)` as the persistent profile store. Add `rank` (`admin | operator | lead | agent`), `process_model` (`tenure | temporary`), `tags`, `mesh_access`, `model_config`, `dismissed_at`, `handoff_ref`. — Seam: Prisma DB is the source of truth for identity; NATS KV holds the live session→profile mapping.
+- **Filename-based agent IDs** (pattern from aios/ai-team) — tenure agents have stable slug-based IDs (e.g., `"dev-lead"`, `"pm-lead"`) defined in `.claude/agents/` markdown files. Session peer IDs are ephemeral; the slug is stable. — Seam: profile `slug` is the stable identity; `peer_id` is the runtime handle.
+
 ## OSS & References
 
-- **Fork:** `claude-peers-mcp` — broker daemon, SQLite-backed, runs on localhost:7899
-- **Reference:** `ai-org` project — SP-1 broker-v2 and SP-2 profiles designs
-- **Reference:** `ai-team` — tenure/temp profile concept, how leads persist
+- **Fork:** `claude-peers-mcp` — broker MCP surface retained; SQLite broker replaced with NATS KV for stable identity mapping
+- **Reference:** `ai-team` — tenure/temp profile concept, BMAD persona definitions
+- **Reference:** `agentic-ai-platform` Prisma schema — Agent model, ResourceScopeBinding, ResourcePermission
 
 ---
 

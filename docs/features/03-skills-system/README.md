@@ -61,6 +61,12 @@ Two kinds of skills:
 
 ---
 
+## OSS Stack
+
+- **aios skills system** (reference, not fork) — provides the proven implementation pattern: markdown files + YAML frontmatter + tool permission list + skills-map.md as the master registry with trigger phrases. — Seam: skills-map.md is the index; skill-navigator reads it silently and matches intent.
+- **agentic-ai-platform Skill model** (schema reference) — `Skill(id, name, description, category, instructions, version, status)` with immutable versioning (`SkillVersion`); adopt for the DB layer when web platform is built (Feature 12). — Seam: CLI layer = flat markdown files; web layer = same content in DB.
+- **Handoff artifact pattern** (from aios) — inter-skill communication via structured markdown deliverables (`deliverables/handoff-<from>-to-<to>-*.md`); adopt for skill chains. — Seam: one skill writes, next skill reads; no ephemeral context passing.
+
 ## OSS & References
 
 - **Reference:** `aios` — 40+ battle-tested skills, skill chains, skill navigator, skill scan

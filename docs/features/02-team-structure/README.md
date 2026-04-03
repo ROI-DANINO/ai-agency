@@ -64,6 +64,13 @@ The hierarchy is not just organizational — it's operational. Tasks flow down. 
 
 ---
 
+## OSS Stack
+
+- **agentic-ai-platform fork** — provides the hierarchy schema wholesale: `Workspace → Cluster → Group → Agent` with FK-enforced cascade. Adopt as-is, add `rank` field (`admin | operator | lead | agent`) to Agent model. — Seam: Prisma schema; platform builds on top, no schema redesign needed.
+- **ResourceScopeBinding + ResourcePermission** (from agentic-ai-platform) — flexible scoped visibility and per-resource access control; adopt for team-level permission gates. — Seam: `can(actor, action, resource)` function in app layer.
+- **AuditLog pattern** (from agentic-ai-platform) — append-only, JSON metadata; adopt for all HITL decision trails and agent actions. — Seam: every mutation writes an audit row.
+- **ai-team agent role definitions** — 14 BMAD persona definitions (Orchestrator, PM Lead, Dev Lead, UX Lead, Security Lead + sub-agents); copy markdown files, don't fork the repo.
+
 ## OSS & References
 
 - **Reference:** `ai-team` — 14 fully defined agent roles with personas, escalation rules, output formats

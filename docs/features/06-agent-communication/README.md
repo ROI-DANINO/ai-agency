@@ -61,11 +61,18 @@ The human operator always has admin-level read/write access to everything.
 
 ---
 
+## OSS Stack
+
+- **NATS.io + JetStream** — replaces the claude-peers SQLite broker as the messaging backbone. Single binary (`nats-server -js`), <20MB RAM, sub-millisecond latency, async Python SDK (`nats-py`). — Seam: subject hierarchy = agent topology. `agent.{id}.inbox` for direct messages; `agent.broadcast.*` for team fan-out; `agent.{type}.task` for request/reply task dispatch. JetStream KV stores agent registry (peer presence + profile mapping).
+- **claude-peers-mcp fork** — retains the MCP surface (list_peers, send_message, check_messages, set_summary) that Claude Code knows how to call. The broker underneath swaps to NATS. Cherry-pick PR #24 (worktree fix) + PR #7 (SendMessage fix). Add structured message payloads (`message_type` + `payload JSON`), group channels, message TTL. — Seam: agents call the same MCP tools as today; NATS handles the routing internally.
+- **NATS HTTP monitoring** (port 8222, built-in) — human visibility into agent message traffic in Phase 1. No additional service needed.
+- **Mattermost** (Phase 2 upgrade path) — human oversight UI with official MCP server. When Feature 09 needs a rich human-facing channel for HITL approvals and agent activity feeds, Mattermost + its official MCP server is the natural choice. Do NOT add Phase 1.
+
 ## OSS & References
 
-- **Fork:** `claude-peers-mcp` — broker daemon, SQLite, REST API on localhost:7899
-- **Reference:** `ai-org` project — full social/communication design (SP-3 social, SP-4 peers-tools)
-- **Reference:** `ai-team` — messaging integration, known bugs documented in `data/claude-peers-research.md`
+- **Fork:** `claude-peers-mcp` — broker daemon; MCP surface retained, SQLite broker replaced with NATS
+- **OSS:** NATS.io + JetStream — messaging backbone replacing the SQLite broker
+- **Reference:** `ai-team` — messaging integration patterns, agent-to-agent communication protocol
 
 ---
 
