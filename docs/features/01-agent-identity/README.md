@@ -74,4 +74,18 @@ None. This is the root.
 ---
 
 ## Session Notes
-<!-- Fill during design/build session -->
+
+### Chat B Design — 2026-04-03
+**Doc:** [chat-b-profile-schema.md](chat-b-profile-schema.md)
+
+**Key decisions:**
+- Orchestrator renamed to **Operator (OP)** throughout
+- Rank system: `admin / operator / lead / agent` — first-class field on all profiles
+- Process model: tenure profiles = real Claude Code subprocesses; temporary = logical (inline)
+- Operator is a tier (multiple independent processes per specialty), not a single agent
+- OP specialties: watcher, reporter, mission — each with different Lead Mesh write access
+- Mesh topology: 4 named layers (Admin, OP, Lead, Agent)
+- Admin profile = user's own profile with superuser access; mesh_default = admin + op
+- Admin Layer content (notes, history) deferred to Feature 02/05
+- Temporary profile lifecycle: spawn → inline → archive (audit trail preserved)
+- Targeted messaging via `tags` field — full design deferred to Feature 06/02
