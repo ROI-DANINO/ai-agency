@@ -19,7 +19,7 @@ Master registry of all platform features. Each feature has its own directory und
 | # | Feature | Phase | Layer | Priority | Depends On | Status |
 |---|---|---|---|---|---|---|
 | 08 | [Model Routing](features/08-model-routing/README.md) | 1 | Cross | Critical | — | DESIGNED |
-| 01 | [Agent Identity & Profiles](features/01-agent-identity/README.md) | 1 | CLI | Critical | — | DESIGNING |
+| 01 | [Agent Identity & Profiles](features/01-agent-identity/README.md) | 1 | CLI | Critical | — | BUILDING |
 | 02 | [Team Structure & Hierarchy](features/02-team-structure/README.md) | 1 | CLI | Critical | 01 | PLACEHOLDER |
 | 07 | [Workflow Engine](features/07-workflow-engine/README.md) | 1 | CLI | Critical | 02 | PLACEHOLDER |
 | 09 | [HITL Reporting](features/09-hitl-reporting/README.md) | 1 | Cross | Critical | 07 | PLACEHOLDER |

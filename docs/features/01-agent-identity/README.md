@@ -81,6 +81,23 @@ None. This is the root.
 
 ## Session Notes
 
+### Harmony Check — 2026-04-04
+**Neighbors checked:** F08 Model Routing (upstream), F02 Team Structure (downstream)
+
+**Issues found:**
+1. F08 + F02 still use "Orchestrator" — F01 Chat B renamed this to Operator (OP). Must propagate before build.
+2. F02 OSS Stack says only "add rank field" — doesn't list process_model, tags, mesh_access, dismissed_at, handoff_ref. F01 is the authoritative Agent model spec; flag for F02 design session.
+
+**Resolutions:**
+1. Note in F08 + F02 READMEs at their respective design sessions to adopt "operator" vocabulary.
+2. F02 design session to use F01 OSS Stack Agent model spec as the complete field list.
+
+**Harmony score:** 🟡 Yellow — functionally aligned; two vocabulary/completeness issues flagged for downstream design sessions, no redesign needed.
+
+**Status:** Feature 01 → BUILDING
+
+---
+
 ### Chat C Design — 2026-04-04
 
 **Stable ID mechanism:** Filename-based slugs. Tenure agents have stable slug-based IDs (e.g., `dev-lead`, `pm-lead`) defined in `.claude/agents/` markdown files. The slug is the stable identity. The NATS KV peer_id is the runtime handle only.
