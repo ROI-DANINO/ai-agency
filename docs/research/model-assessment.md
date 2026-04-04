@@ -20,26 +20,27 @@ Research on model selection for each tier and role. Update this as models evolve
 - Less tested for agentic routing vs. Claude/GPT family
 - Response latency on OpenRouter can vary
 
-**Recommendation:** Good default for Tier 2 orchestration. Monitor closely in early runs. Have Nemotron as fallback.
+**Recommendation:** Good default for Tier 2 orchestration. Monitor closely in early runs. Have Claude Haiku or GPT-4o-mini as fallback.
 
 ---
 
-## Team Leads: Nemotron (via OpenRouter)
+## Team Leads: Claude Haiku
 
 **Role:** Domain leads — PM, Dev, UX, Security — receiving tasks and managing sub-agents
 
+**Decision (2026-04-03):** Nemotron removed. Active, documented failures in agentic pipelines — infinite tool loops, malformed output. Claude Haiku is the default for Team Leads.
+
 **Strengths:**
-- NVIDIA-trained, strong reasoning and instruction following
-- Cost-effective for sustained multi-turn coordination
-- Good at structured report generation (decision reports, PRDs, ADRs)
-- Available via OpenRouter
+- Most reliable model for agentic tool use at Tier 2 cost
+- Fast, strong instruction following
+- Consistent structured output for decision reports, PRDs, ADRs
+- Native Anthropic tool use support — no prompt engineering workarounds
 
 **Potential Bottlenecks:**
-- Less established for agentic use cases than Claude/GPT
-- May require more explicit prompting for escalation rules
-- Tool use reliability — test carefully before production use
+- Less context window than Kimi/Qwen for very long documents
+- Anthropic API dependency (not via OpenRouter) — separate key required
 
-**Recommendation:** Evaluate Nemotron vs. Claude Haiku for Team Lead role. Haiku may be more reliable for agentic tool use at similar cost.
+**Recommendation:** Default for all Team Lead roles. GPT-4o-mini is a viable alternative if Anthropic API is unavailable.
 
 ---
 
@@ -59,8 +60,8 @@ Use for: Research sub-agents, bulk drafting, initial analysis, anything that doe
 
 | Model | Best For | Notes |
 |---|---|---|
-| **Nemotron** (NVIDIA) | Team leads, coordination, structured reports | Via OpenRouter |
-| **Claude Haiku** | Fast agentic tool use, coordination | Most reliable for tool calling at low cost |
+| **Claude Haiku** | Team leads, fast agentic tool use, coordination | Most reliable for tool calling at low cost — default Team Lead |
+| **GPT-4o-mini** | General coordination, drafting | Fallback if Anthropic unavailable |
 | **GPT-4o-mini** | General coordination, drafting | Good balance of speed/cost/quality |
 
 Use for: All Team Leads, light coordination, reviews that don't require deep reasoning.
@@ -96,8 +97,8 @@ Use for: Complex development tasks, final QA, security audits, architecture deci
 
 ## Open Questions
 
-- [ ] Validate Nemotron tool use reliability before committing it to Team Lead role
+- [x] Nemotron for Team Leads — removed 2026-04-03, active agentic failures confirmed. Claude Haiku is default.
 - [ ] Benchmark Qwen 3.6 vs. Claude Haiku for Orchestrator task decomposition quality
-- [ ] Clarify "Manus" reference in Tier 3 — is this a model or an agent system?
+- [x] "Manus" — confirmed agent platform, not a model. Remove from all tier tables.
 - [ ] Kimi context window — confirm current limit (varies by version)
 - [ ] Test GLM availability and latency via OpenRouter

@@ -36,13 +36,13 @@ Human (Lead Director)
 Orchestrator (Qwen 3.6 via OpenRouter)
     → task decomposition + routing
     │
-    ├── PM Lead (Nemotron)
+    ├── PM Lead (Claude Haiku)
     │       └── sub-agents: Analyst, Scrum Master
-    ├── Dev Lead (Nemotron)
+    ├── Dev Lead (Claude Haiku)
     │       └── sub-agents: Architect, Developer, QA
-    ├── UX Lead (Nemotron)
+    ├── UX Lead (Claude Haiku)
     │       └── sub-agents: UX Researcher, UI Designer
-    └── Security Lead (Nemotron)
+    └── Security Lead (Claude Haiku)
             └── sub-agents: CSO Auditor, Pen Tester
 ```
 
@@ -56,7 +56,7 @@ Orchestrator (Qwen 3.6 via OpenRouter)
 | Tier | Models | Assigned To |
 |---|---|---|
 | Tier 1 | GLM, Kimi, Qwen | Research sub-agents, long-context tasks, bulk drafts |
-| Tier 2 | Nemotron, Claude Haiku, GPT-4o-mini | All Team Leads, coordination, reviews |
+| Tier 2 | Claude Haiku, GPT-4o-mini | All Team Leads, coordination, reviews |
 | Tier 3 | Claude Sonnet/Opus, GPT-4o | Complex coding, critical architecture, final QA, security |
 
 Routing is managed by LiteLLM. The Orchestrator declares which tier a task requires. The human can override.
