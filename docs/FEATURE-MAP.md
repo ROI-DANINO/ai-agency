@@ -92,5 +92,6 @@ The "it works" moment: a team of agents decomposes a task, executes it, and surf
 
 ## Next Session
 
-OSS stack locked 2026-04-04. Feature 01 Chat C is next: stable ID mechanism, profile storage (flat file + DB hybrid), claude-peers-mcp fork strategy informed by NATS research.
-Read: `VISION.md`, `features/01-agent-identity/README.md`, `research/forks-and-oss.md`, `.project-session/2026-04-03-feature01-chat-b.md`
+Feature 01 complete (BUILDING). Task 3: Feature 03 Skeleton Design — session-start, session-end, handoff writer, briefing pack reader skills for Milestone 1.
+Key context: session-start replaces project-brief + daily-brief; session-end confirmed on-point.
+Read: `features/03-skills-system/README.md`, `features/01-agent-identity/README.md`, `.project-session/2026-04-04-session-close.md`
