@@ -5,6 +5,7 @@ Decisions, direction changes, milestones, and the thinking behind them.
 
 ---
 
+- [2026-04-05 — Skills & tooling system: direction locked — three tracks, architecture split](2026-04-05-skills-tooling-system-designed.md)
 - [2026-04-05 — OSS fork sources assessed: what to use, what to skip](2026-04-05-oss-fork-sources-assessed.md)
 - [2026-04-05 — Agent hierarchy designed: 3-tier structure, protected leads, CoS skill, Phase 1 mesh](2026-04-05-agent-hierarchy-designed.md)
 - [2026-04-04 — Full product roadmap locked: 3 phases, 16 features, milestone structure](2026-04-04-full-roadmap-locked.md)
