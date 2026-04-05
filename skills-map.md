@@ -20,6 +20,7 @@ user-invocable: false
 | Skill | Triggers | What it does |
 |-------|----------|--------------|
 | `project-brief` | start session, orient me, project brief, what are we working on, session start | Reads project state, presents status brief, runs phase workflow |
+| `task-sync` | task sync, update tasks, sync tasks, /task-sync | Reads 4 project sources, writes TASKS.md, cleans dirty flag. Called by session-end and project-brief. |
 
 ---
 
@@ -43,6 +44,7 @@ user-invocable: false
 
 | Skill | Inspiration From | Purpose |
 |-------|-----------------|---------|
+| `task-sync` | tasks-manager design spec | Syncs TASKS.md — ✓ created |
 | `feature-design` | project-brief Design phase | Run a focused design session for a specific feature phase |
 | `capture` | AIOS `note` | Mid-session decision/question capture, project-aware |
 | `context7` | context7 plugin | Library docs lookup (already installed, keep as-is) |
