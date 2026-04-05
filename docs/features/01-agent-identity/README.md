@@ -1,6 +1,6 @@
 # Feature 01 — Agent Identity & Profiles
 
-**Status:** PLACEHOLDER  
+**Status:** BUILDING  
 **Phase:** 1 — Foundation  
 **Layer:** CLI Plugin + Cross-layer  
 **Priority:** Critical  

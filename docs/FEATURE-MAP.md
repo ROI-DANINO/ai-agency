@@ -20,7 +20,7 @@ Master registry of all platform features. Each feature has its own directory und
 |---|---|---|---|---|---|---|
 | 08 | [Model Routing](features/08-model-routing/README.md) | 1 | Cross | Critical | — | DESIGNED |
 | 01 | [Agent Identity & Profiles](features/01-agent-identity/README.md) | 1 | CLI | Critical | — | BUILDING |
-| 02 | [Team Structure & Hierarchy](features/02-team-structure/README.md) | 1 | CLI | Critical | 01 | PLACEHOLDER |
+| 02 | [Team Structure & Hierarchy](features/02-team-structure/README.md) | 1 | CLI | Critical | 01 | DESIGNED |
 | 07 | [Workflow Engine](features/07-workflow-engine/README.md) | 1 | CLI | Critical | 02 | PLACEHOLDER |
 | 09 | [HITL Reporting](features/09-hitl-reporting/README.md) | 1 | Cross | Critical | 07 | PLACEHOLDER |
 | 03 | [Skills System](features/03-skills-system/README.md) | 1 | CLI | Critical | 02 | PLACEHOLDER |
@@ -89,9 +89,3 @@ The "it works" moment: a team of agents decomposes a task, executes it, and surf
 **Decisions locked 2026-04-04:** LangGraph over CrewAI; NATS over Slack alternatives; Mem0 over raw pgvector; Docker exec over E2B; Paperclip as Feature 12 secondary candidate. See `research/forks-and-oss.md` for full analysis and rationale.
 
 ---
-
-## Next Session
-
-Feature 01 complete (BUILDING). Task 3: Feature 03 Skeleton Design — session-start, session-end, handoff writer, briefing pack reader skills for Milestone 1.
-Key context: session-start replaces project-brief + daily-brief; session-end confirmed on-point.
-Read: `features/03-skills-system/README.md`, `features/01-agent-identity/README.md`, `.project-session/2026-04-04-session-close.md`
