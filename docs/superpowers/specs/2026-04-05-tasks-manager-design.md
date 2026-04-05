@@ -198,3 +198,29 @@ Trigger: called by session-end, project-brief (if dirty), or manually
 - Where does the `task-sync` skill live? In the ai-org Claude Code plugin (Track 2) or as a standalone skill now? <!-- PLACEHOLDER -->
 - Does `project-brief` call `task-sync` directly, or just check the dirty flag and let the user decide? <!-- PLACEHOLDER -->
 - Max line budget for TASKS.md — 30 lines is the target. Hard cap or soft? <!-- PLACEHOLDER -->
+
+---
+
+## Out of Scope — Future Extensions
+
+These items were captured during design but are explicitly deferred. Each is a candidate for its own design session.
+
+### 1. Unified Product Data Management System
+The tasks manager mechanism (single writer, dirty flag, token-efficient read, auto-update) is a pattern that should extend to all project state maps:
+- `docs/FEATURE-MAP.md` — currently manually managed; could be auto-synced by a `feature-sync` variant
+- Agent skills map (`skills-map.md`) — currently manually managed; could be auto-updated when skills are created/modified
+- Tools map (not yet designed) — same pattern when F04 Tools Layer is designed
+- Any future state map added to the project
+
+The vision: one coherent `project-sync` architecture where every state document in the project has a defined writer, a dirty flag, and a token-efficient read surface. Human edits trigger the flag; the sync skill reconciles and updates. Apple-level product data management — nothing is ever manually out of sync.
+
+**Design session needed before building.** Captures what the unified sync architecture looks like, what the shared dirty-flag pattern is, and how individual sync skills (task-sync, feature-sync, skills-sync, tools-sync) relate to a potential master `project-sync` orchestrator.
+
+### 2. Status Vocabulary Reconciliation
+The PLACEHOLDER → DESIGNING → HARMONY → BUILDING → DONE flow defined in project-brief doesn't match what FEATURE-MAP actually uses (DESIGNED is not an official status). This needs a decision + propagation to all feature READMEs and project-brief skill.
+
+### 3. Skills Track Integration
+The skills/tooling tracks (Track 1 cleanup, Track 2 plugin, Track 3 agent skills) are currently tracked in `~/.claude/plans/agile-marinating-glacier.md` — outside the project. Once Track 2 is built (ai-org as Claude Code plugin), task-sync's source set should replace that external path with an internal project file.
+
+### 4. task-sync Source Set Evolution
+Currently reads 4 fixed files. As the project grows (new plans, new maps), the source set will need to expand. Design a source registry (a config in task-sync itself) rather than hardcoding file paths, so the source set can be updated without rewriting the skill logic.
