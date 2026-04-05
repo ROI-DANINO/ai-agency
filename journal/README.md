@@ -5,6 +5,7 @@ Decisions, direction changes, milestones, and the thinking behind them.
 
 ---
 
+- [2026-04-05 — Skills cleanup Track 1: clean slate executed](2026-04-05-skills-track1-cleanup.md)
 - [2026-04-05 — Tasks manager built: TASKS.md + task-sync + dirty flag live](2026-04-05-tasks-manager-built.md)
 - [2026-04-05 — Tasks manager designed: TASKS.md + task-sync architecture](2026-04-05-tasks-manager-designed.md)
 - [2026-04-05 — Skills & tooling system: direction locked — three tracks, architecture split](2026-04-05-skills-tooling-system-designed.md)
