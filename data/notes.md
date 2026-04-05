@@ -1,3 +1,9 @@
+### [2026-04-05] — ai-org
+peer comms via claude-peers didn't land in the skills-cleanup session — user had to paste handoff manually. claude-peers message sending works but the receiving session may not surface it visibly enough. investigate or use a different handoff mechanism next time. #blocker
+
+### [2026-04-05] — ai-org
+Feature map, agent skills map, and tools map should all be managed by the same systematic mechanism behind the tasks manager — a unified apple-level product data management system. Everything that tracks project state lives under one coherent, token-efficient, auto-updating architecture. #direction #idea
+
 ### [2026-04-03] — ai-org
 Skills & tools audit and organization (before Feature 01 Chat B) #next
 
