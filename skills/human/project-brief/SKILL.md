@@ -27,7 +27,15 @@ Before presenting the brief, run `task-sync` to ensure TASKS.md is current:
 Read these files in order:
 1. `TASKS.md` — current bottlenecks, priorities, open questions
 2. `docs/FEATURE-MAP.md` — build order and feature status
-3. Most recent file in `journal/` (by date prefix) — what happened last session
+3. `journal/HANDOFF.md` (if it exists) — structured handoff from the last session: what happened, current state, what's next, key files
+4. All journal files from the last 3 days (by date prefix, excluding HANDOFF.md) — captures parallel session work that may not be in HANDOFF.md
+
+## Step 2b — Load Prerequisites
+
+If `journal/HANDOFF.md` has a `Prerequisites` section:
+- Read every file listed there before presenting the brief
+- Surface them explicitly in the brief: "Required reading this session: X — {why}"
+- These are mandatory, not optional context
 
 ## Step 3 — Present the Brief
 

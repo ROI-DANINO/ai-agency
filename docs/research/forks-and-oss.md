@@ -140,6 +140,8 @@ Total estimated custom code: **~580 lines** across 7 components. Everything else
 | `impeccable` (`pbakaus/impeccable`) | Domain-specific command pattern (frontmatter-driven skill framework by Paul Bakaus that steers AI output away from cliché UIs using explicit design commands) — study before finalising Feature 03 skill spec and Feature 12 UI design language. The command-over-description discipline maps directly to how our skills steer agent behaviour. |
 | `heretic` (`p-e-w/heretic`) | Abliteration technique for removing refusal behaviour from local LLMs without post-training. Reference when preparing Ollama models for internal agent tasks that production API models would refuse. **Never apply to production API models.** Feature 08 (local model config). |
 | `nanochat` (`karpathy/nanochat`) | Single-file LLM training + fine-tune pipeline by Andrej Karpathy. Reference only if custom agent-specific models are needed in Phase 3+. No action in Phase 1 or 2. |
+| `agency-agents` (`msitarzewski/agency-agents`) | Different project from nacerallahchemssy's — "complete AI agency" with specialists defined by personality, process, and deliverables (frontend wizards, etc.). Richer character + role definitions. Compare with nacerallahchemssy version before finalising Feature 01 agent profiles. |
+| `overstory` (`jayminwest/overstory`) | Multi-agent orchestration for Claude Code, Pi, and more — pluggable runtime adapters. May overlap with or inform the Plugin Bridge (Feature 11) and agent identity/dispatch model. Read before finalising Feature 11 design. |
 
 ---
 

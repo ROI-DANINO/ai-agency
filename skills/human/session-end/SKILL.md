@@ -59,7 +59,7 @@ Clear `.tasks-dirty` if present.
 
 ## Step 4 — Handoff Prompt
 
-Output a ready-to-paste handoff prompt for the next session:
+Write the handoff to `journal/HANDOFF.md` (overwrite each time) AND output it to the user:
 
 ```
 ---
@@ -69,8 +69,14 @@ Last session: {1 sentence summary}
 State: {current phase/milestone}
 Next: {top 1–2 items from TASKS.md Now}
 Key files: {2–3 files most relevant to continue the work}
+
+Prerequisites — MUST READ before starting next session:
+- {repo/doc/journal that must be read before work begins, with one line on why}
+- (list only if something specific was flagged this session; omit section if nothing)
 ---
 ```
+
+`journal/HANDOFF.md` is the persistent handoff file that `project-brief` reads at the start of the next session.
 
 ## Tone
 
