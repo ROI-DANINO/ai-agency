@@ -16,6 +16,9 @@ Smoke-test: deferred to milestone boundary
 3. **F02 build (Plan B)** — define `.mesh/` file format spec (profile.md, inbox.md, journal.md) before scaffolding
 
 ## Resume
+1. **Design SOUL.md for Hermes** — current one is a placeholder; design a proper project-context doc that gives Hermes the right orientation (agent model, build phase, constraints, key files, working style)
+
+
 1. **Add `toolPack` to Agent schema** — `toolPack String[] @default([])` before F04 design begins; one migration now beats two later
 2. **F03 build** — design locked; build queue after F02 complete
 3. **F07 Light Design** — async linear workflow; design only what Milestone 1 needs
