@@ -2,3 +2,11 @@
 .project-session/
 .worktrees/
 .tasks-dirty
+
+# Node.js
+node_modules/
+dist/
+.vite/
+
+# Environment
+.env
