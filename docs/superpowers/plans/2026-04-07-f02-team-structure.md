@@ -100,7 +100,7 @@ enum AgentStatus {
 
 enum AgentScope {
   TASK
-  TENURE
+  PERSISTENT
 }
 ```
 
@@ -272,7 +272,7 @@ export interface AgentProfile {
   domain?: string;
   protected: boolean;
   spawnedBy?: string;
-  scope?: "task" | "tenure";
+  scope?: "task" | "persistent";
   body: string;
 }
 
@@ -296,7 +296,7 @@ export async function readProfile(filePath: string): Promise<AgentProfile> {
     domain: fm["domain"] !== undefined ? String(fm["domain"]) : undefined,
     protected: fm["protected"] === true,
     spawnedBy: fm["spawned_by"] !== undefined ? String(fm["spawned_by"]) : undefined,
-    scope: fm["scope"] === "task" || fm["scope"] === "tenure" ? fm["scope"] : undefined,
+    scope: fm["scope"] === "task" || fm["scope"] === "persistent" ? fm["scope"] : undefined,
     body: parsed.content,
   };
 }
@@ -424,7 +424,7 @@ export async function syncAgentToDb(
   sessionId: string,
 ): Promise<void> {
   const scopeValue = profile.scope
-    ? (profile.scope.toUpperCase() as "TASK" | "TENURE")
+    ? (profile.scope.toUpperCase() as "TASK" | "PERSISTENT")
     : null;
 
   await prisma.agent.upsert({
@@ -433,6 +433,7 @@ export async function syncAgentToDb(
       slug: profile.slug,
       name: profile.name,
       type: profile.scope === "task" ? "TEMPORARY" : "TENURE",
+
       rank: profile.rank.toUpperCase() as "ADMIN" | "OPERATOR" | "LEAD" | "AGENT",
       specialty: profile.specialty ?? null,
       domain: profile.domain ?? null,
@@ -579,4 +580,4 @@ git commit -m "feat(f02): scaffold .mesh/ directory skeleton"
 
 **Placeholder scan:** None — all steps have exact code and commands.
 
-**Type consistency:** `spawnedBy` (camelCase) used in `AgentProfile` and `syncAgentToDb` throughout; frontmatter key `spawned_by` (snake_case) mapped at parse time. `scope` values `"task"/"tenure"` in TypeScript uppercased to `"TASK"/"TENURE"` for Prisma enum at the DB boundary — consistently applied in both `create` and `update` clauses and test assertions.
+**Type consistency:** `spawnedBy` (camelCase) used in `AgentProfile` and `syncAgentToDb` throughout; frontmatter key `spawned_by` (snake_case) mapped at parse time. `scope` values `"task"/"persistent"` in TypeScript uppercased to `"TASK"/"PERSISTENT"` for Prisma enum at the DB boundary — consistently applied in both `create` and `update` clauses and test assertions.
