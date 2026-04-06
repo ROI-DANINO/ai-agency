@@ -3,6 +3,7 @@ name: skills-map
 description: >
   Skill index for ai-org. Used by skill-navigator to route invocations.
   All skills here are purpose-built for this project — not generic AIOS skills.
+  Rule: every skill in skills/ must appear here. skill-scan enforces this.
 type: reference
 user-invocable: false
 ---
@@ -15,36 +16,45 @@ user-invocable: false
 
 ---
 
-## Session Start
+## Human Skills (user-invocable — appear in / menu)
 
-| Skill | Triggers | What it does |
-|-------|----------|--------------|
-| `project-brief` | start session, orient me, project brief, what are we working on, session start | Reads project state, presents status brief, runs phase workflow |
-| `task-sync` | task sync, update tasks, sync tasks, /task-sync | Reads 4 project sources, writes TASKS.md, cleans dirty flag. Called by session-end and project-brief. |
-
----
-
-## Session Close
-
-| Skill | Triggers | What it does |
-|-------|----------|--------------|
-| `session-end` | end session, wrap up, close session, I'm done, handoff, session end | Writes journal entry (if meaningful), local session log, handoff prompt |
+| Skill | Path | Triggers | What it does | Status |
+|-------|------|----------|--------------|--------|
+| `project-brief` | `skills/human/project-brief/` | start session, orient me, project brief, what are we working on, session start, /project-brief | Syncs tasks, reads project state, presents status brief, shows phase workflow | active |
+| `session-end` | `skills/human/session-end/` | end session, wrap up, close session, I'm done, handoff, session end, /session-end | Writes journal entry, runs task-sync, produces handoff prompt | active |
+| `task-sync` | `skills/human/task-sync/` | task sync, update tasks, sync tasks, /task-sync | Reads 4 project sources, writes TASKS.md, clears dirty flag | active |
+| `skill-scan` | `skills/human/skill-scan/` | skill scan, audit skills, what skills are broken, skill audit, /skill-scan | Full skill audit — finds issues, writes report to data/ | active |
+| `feature-design` | `skills/human/feature-design/` | feature design, design feature, design session, /feature-design | Focused design session for a feature phase | stub |
+| `capture` | `skills/human/capture/` | capture, note this, save this, remember this, /capture | Mid-session decision/question capture | stub |
 
 ---
 
-## Skill Maintenance
+## Agent Skills (internal — invoked by skills or agents, not humans)
 
-| Skill | Triggers | What it does |
-|-------|----------|--------------|
-| `skill-scan` | skill scan, audit skills, what skills are broken, skill audit | Full skill audit — finds issues, writes report to data/ |
+| Skill | Path | What it does | Status |
+|-------|------|--------------|--------|
+| `briefing-pack` | `skills/agent/briefing-pack/` | Builds context pack for an agent before a task | stub |
+| `handoff` | `skills/agent/handoff/` | Writes handoff artifact when work transfers between agents | stub |
+| `decision-report` | `skills/agent/decision-report/` | Structures HITL decision surface for human approval gate | stub |
 
 ---
 
-## Skills to Build (not yet created)
+## Archive
 
-| Skill | Inspiration From | Purpose |
-|-------|-----------------|---------|
-| `task-sync` | tasks-manager design spec | Syncs TASKS.md — ✓ created |
-| `feature-design` | project-brief Design phase | Run a focused design session for a specific feature phase |
-| `capture` | AIOS `note` | Mid-session decision/question capture, project-aware |
-| `context7` | context7 plugin | Library docs lookup (already installed, keep as-is) |
+Skills moved here are retired. Never deleted — moved to `skills/archive/`.
+
+| Skill | Archived | Reason |
+|-------|----------|--------|
+| _(none yet)_ | — | — |
+
+---
+
+## Skills to Build
+
+| Skill | Inspiration | Purpose | When |
+|-------|-------------|---------|------|
+| `briefing-pack` (full) | F03 design | Full agent context packaging with Mem0 | F03 + F05 build |
+| `handoff` (full) | F02 team structure | Agent-to-agent work transfer | F03 build |
+| `decision-report` (full) | F09 HITL | Human approval gate surface | F09 build |
+| `feature-design` (full) | project-brief Design phase | Structured feature design sessions | F03 build |
+| `capture` (full) | AIOS `note` | Mid-session project-aware capture | F03 build |

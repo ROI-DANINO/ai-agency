@@ -1,0 +1,15 @@
+name: ai-org
+version: 0.1.0
+registry: ai-org
+description: AI Agency Platform — Phase 1 CLI Plugin
+runtime-dirs:
+  - agents
+  - skills
+  - tools
+  - memory
+  - workflow
+  - hitl
+  - artifacts
+files:
+  - manifest.yaml
+  - skills-map.md
