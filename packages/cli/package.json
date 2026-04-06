@@ -1,0 +1,30 @@
+{
+  "name": "@ai-org/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "ai-org": "./dist/src/index.js"
+  },
+  "exports": {
+    ".": "./dist/src/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "gray-matter": "^4.0.3",
+    "nats": "^2.28.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
