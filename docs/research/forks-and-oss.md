@@ -53,6 +53,19 @@ Custom code is a liability. Every line you write is a line you maintain. Fork on
 
 ---
 
+### 4. Open Viking (Secondary Investigation)
+**Source:** `github.com/volcengine/OpenViking`  
+**What it is:** Memory and database architecture for AI agents. Organizes agent context into a file-system-like structure (directories = topics, files = memories) instead of flat vector search. Designed to reduce token usage by loading only the relevant context subtree into the prompt.  
+**Why investigate:** Token efficiency is a first-class design constraint in this project. OpenViking's file-system context model could replace or wrap Mem0's retrieval layer — specifically for briefing pack generation (Feature 05), where we currently load memory.search() results wholesale.  
+**Decision question:** Can OpenViking's context-file architecture serve as the retrieval layer for briefing packs, with Mem0 handling extraction and deduplication upstream?  
+**If yes:** Adopt OpenViking as the context-loading layer between Mem0 and the briefing pack generator.  
+**If no:** Use Mem0 as-is; OpenViking patterns inform how we structure context files manually.  
+**Feature:** 05 Memory & Knowledge  
+**Status:** Investigate — create `docs/research/openviking.md` (parallel to paiperclip.md pattern)  
+**Effort:** Unknown until source is read.
+
+---
+
 ### 3. Paperclip (Secondary Investigation)
 **Source:** `github.com/paperclipai/paperclip`  
 **Stars:** 46,100 | License: MIT  
@@ -79,6 +92,7 @@ Custom code is a liability. Every line you write is a line you maintain. Fork on
 | **Supabase** | Managed cloud or self-hosted | Use the service |
 | **shadcn/ui** | `npx shadcn@latest add` | UI components, use as-is |
 | **Ollama** | `curl -fsSL https://ollama.ai/install.sh` | Local models, no fork needed |
+| **Promptfoo** | `npx promptfoo@latest` or `pip install promptfoo` | Eval + red-team agent skill outputs; seam is `promptfoo eval` against LiteLLM endpoints |
 
 ---
 
@@ -122,6 +136,10 @@ Total estimated custom code: **~580 lines** across 7 components. Everything else
 | `agentic-ai` | Full UX spec for web platform, skills bank design, dual-mode tool builder concept |
 | `hermes-integration` | Execution engine pattern, memory bridge design, tool delegation pattern, handoff artifacts |
 | `pi_agency` | Subagent delegation model, workflow routing logic, specialist role structure |
+| `agency-agents` (`nacerallahchemssy/agency-agents`) | Ready-made persona definitions for PM, Dev, UX, Security, QA, and other job roles — use as starter content for Feature 01 agent profiles and Feature 03 skill templates. Don't fork: copy the role markdown files that fit, discard the rest. |
+| `impeccable` (`pbakaus/impeccable`) | Domain-specific command pattern (frontmatter-driven skill framework by Paul Bakaus that steers AI output away from cliché UIs using explicit design commands) — study before finalising Feature 03 skill spec and Feature 12 UI design language. The command-over-description discipline maps directly to how our skills steer agent behaviour. |
+| `heretic` (`p-e-w/heretic`) | Abliteration technique for removing refusal behaviour from local LLMs without post-training. Reference when preparing Ollama models for internal agent tasks that production API models would refuse. **Never apply to production API models.** Feature 08 (local model config). |
+| `nanochat` (`karpathy/nanochat`) | Single-file LLM training + fine-tune pipeline by Andrej Karpathy. Reference only if custom agent-specific models are needed in Phase 3+. No action in Phase 1 or 2. |
 
 ---
 
@@ -129,16 +147,21 @@ Total estimated custom code: **~580 lines** across 7 components. Everything else
 
 | Feature | OSS Tool | Seam / How it connects |
 |---|---|---|
-| **01 Agent Identity** | claude-peers-mcp fork + NATS KV | Peer IDs are ephemeral; stable identity in ai-org DB; NATS KV maps session→profile |
+| **01 Agent Identity** | claude-peers-mcp fork + NATS KV | Peer IDs are ephemeral; stable identity in ai-org DB; NATS KV maps session→profile. agency-agents personas used as starter profile content. |
 | **02 Team Structure** | agentic-ai-platform Prisma schema | Workspace→Cluster→Group→Agent hierarchy; adopt immutable versioning + ResourceScopeBinding |
-| **03 Skills System** | aios patterns (file-based) | Markdown + YAML frontmatter; skills-map.md as registry; handoff artifacts for chaining |
+| **03 Skills System** | aios patterns (file-based) | Markdown + YAML frontmatter; skills-map.md as registry; handoff artifacts for chaining. Study impeccable command discipline + agency-agents role templates before finalising spec. |
 | **04 Tools Layer** | agentic-ai-platform MCPTool schema + Docker exec | Schema adopted wholesale; Docker exec for sandbox; Deno V8 for JS tools |
-| **05 Memory** | Mem0 + Supabase pgvector | Agents call memory.add() at session-end, memory.search() at start; LiteLLM for extraction model |
+| **05 Memory** | Mem0 + Supabase pgvector | Agents call memory.add() at session-end, memory.search() at start; LiteLLM for extraction model. Investigate OpenViking as context-loading layer for briefing packs. |
 | **06 Agent Comms** | NATS.io + JetStream | Subject schema = agent topology; agent.{id}.inbox for DM; agent.broadcast.* for fan-out |
 | **07 Workflow Engine** | LangGraph 1.0 + AsyncSqliteSaver | StateGraph = task DAG; interrupt() for HITL pause; thread_id = task/session handle |
+| **08 Model Routing** | LiteLLM | Universal API; routing rules in config; no code changes to swap models. heretic for preparing local Ollama models that need unconstrained behaviour. |
 | **09 HITL Reporting** | LangGraph interrupt() + n8n | LangGraph pauses and emits payload → n8n webhook → notifies → callback resumes LangGraph |
-| **12 Web Platform** | agentic-ai-platform fork (primary) | Prisma schema + NextAuth + Vitest; investigate Paperclip as alternative shell |
-| **08 Model Routing** | LiteLLM | Universal API; routing rules in config; no code changes to swap models — see feature 08 README |
+| **10 Observability** | Promptfoo + LangGraph tracing | `promptfoo eval` against skill outputs; A/B model comparison via LiteLLM; red-team agent pipelines; trace IDs logged to AuditLog |
+| **11 Plugin Bridge** | FastMCP | MCP server (~200 lines Python) exposing platform capabilities to Claude Code / OpenCode / Pi |
+| **12 Web Platform** | agentic-ai-platform fork (primary) | Prisma schema + NextAuth + Vitest; investigate Paperclip as alternative shell. impeccable design command pattern informs UI skill design. |
+| **13 Project Management** | agentic-ai-platform schema (via F12 fork) | Task, Milestone, Deliverable models already in Prisma schema; build UI on top |
+| **14 Agency Builder** | Next.js (via F12) + LangGraph | Wizard UI in Next.js; team config written to DB; LangGraph executes initial plan |
+| **15 Desktop App** | Tauri | Wraps Next.js web layer; native shell; Phase 3 — note Electron as fallback |
 
 ---
 
@@ -158,3 +181,9 @@ Total estimated custom code: **~580 lines** across 7 components. Everything else
 | Investigate Paperclip before committing Feature 12 | 46K stars, MIT, purpose-built for agent teams; check if UI layer is decoupable from runtime | 2026-04-04 |
 | Temporal: note migration path for Phase 3 | Battle-hardened durable workflows for multi-machine; overkill for Phase 1 single-machine local | 2026-04-04 |
 | vm2: DO NOT USE | Deprecated, has critical CVEs | 2026-04-04 |
+| Promptfoo for Feature 10 (Observability) | Only tool covering prompt eval + red-teaming + model comparison in one CLI; fills the observability gap without custom code; integrates natively with LiteLLM | 2026-04-06 |
+| Investigate OpenViking for Feature 05 (Memory) | File-system context model directly targets token bloat; evaluate before locking Mem0 as sole retrieval layer; create openviking.md deep-dive | 2026-04-06 |
+| agency-agents as reference for Features 01 + 03 | 30+ ready-made job-role personas avoid inventing agent identity templates from scratch; copy what fits, discard the rest | 2026-04-06 |
+| impeccable as reference for Features 03 + 12 | Domain-specific command-over-description discipline maps to skill frontmatter design; study before finalising Feature 03 spec and UI design language | 2026-04-06 |
+| heretic: reference only, local Ollama models only | Abliteration valid for internal Ollama models that refuse agent tasks; never apply to production API models; relevant to Feature 08 local model config | 2026-04-06 |
+| nanochat: defer to Phase 3+ | Fine-tuning custom agent models not needed until platform is stable; reference only for future model training work | 2026-04-06 |
