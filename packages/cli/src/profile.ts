@@ -13,6 +13,9 @@ export interface AgentProfile {
   mesh_write: string[];
   specialty?: string;
   domain?: string;
+  protected: boolean;
+  spawnedBy?: string;
+  scope?: "task" | "persistent";
   body: string;
 }
 
@@ -34,6 +37,9 @@ export async function readProfile(filePath: string): Promise<AgentProfile> {
     mesh_write: Array.isArray(fm["mesh_write"]) ? (fm["mesh_write"] as string[]) : [],
     specialty: fm["specialty"] !== undefined ? String(fm["specialty"]) : undefined,
     domain: fm["domain"] !== undefined ? String(fm["domain"]) : undefined,
+    protected: fm["protected"] === true,
+    spawnedBy: fm["spawned_by"] !== undefined ? String(fm["spawned_by"]) : undefined,
+    scope: fm["scope"] === "task" || fm["scope"] === "persistent" ? fm["scope"] : undefined,
     body: parsed.content,
   };
 }

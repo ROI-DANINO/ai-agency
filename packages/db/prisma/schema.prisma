@@ -20,6 +20,9 @@ model Agent {
   modelTier        Int         @default(2)
   skillPack        String[]    @default([])
   tags             String[]    @default([])
+  protected        Boolean     @default(false)
+  spawnedBy        String?
+  scope            AgentScope?
   status           AgentStatus @default(OFFLINE)
   sessionCount     Int         @default(0)
   currentSessionId String?
@@ -51,4 +54,9 @@ enum AgentStatus {
   ONLINE
   OFFLINE
   CRASHED
+}
+
+enum AgentScope {
+  TASK
+  PERSISTENT
 }

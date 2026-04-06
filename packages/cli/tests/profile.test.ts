@@ -36,3 +36,36 @@ describe("readProfile", () => {
     await expect(readProfile("/nonexistent/path.md")).rejects.toThrow();
   });
 });
+
+describe("readProfile — protected field", () => {
+  const recruitmentFixture = resolve(__dirname, "../fixtures/recruitment-lead.md");
+
+  it("parses protected: true from frontmatter", async () => {
+    const profile = await readProfile(recruitmentFixture);
+    expect(profile.protected).toBe(true);
+    expect(profile.spawnedBy).toBeUndefined();
+    expect(profile.scope).toBeUndefined();
+  });
+
+  it("defaults protected to false when field is absent", async () => {
+    const profile = await readProfile(fixturePath); // dev-lead.md
+    expect(profile.protected).toBe(false);
+  });
+});
+
+describe("readProfile — spawned_by and scope fields", () => {
+  const developerFixture = resolve(__dirname, "../fixtures/developer.md");
+
+  it("parses spawned_by and scope from sub-agent frontmatter", async () => {
+    const profile = await readProfile(developerFixture);
+    expect(profile.spawnedBy).toBe("dev-lead");
+    expect(profile.scope).toBe("task");
+    expect(profile.protected).toBe(false);
+  });
+
+  it("returns undefined scope and spawned_by for leads without those fields", async () => {
+    const profile = await readProfile(fixturePath); // dev-lead.md
+    expect(profile.spawnedBy).toBeUndefined();
+    expect(profile.scope).toBeUndefined();
+  });
+});
