@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Agent {
+  id               String      @id @default(uuid())
+  slug             String      @unique
+  name             String
+  type             AgentType
+  rank             AgentRank
+  specialty        String?
+  domain           String?
+  meshRead         String[]
+  meshWrite        String[]
+  modelTier        Int         @default(2)
+  skillPack        String[]    @default([])
+  tags             String[]    @default([])
+  status           AgentStatus @default(OFFLINE)
+  sessionCount     Int         @default(0)
+  currentSessionId String?
+  sessionStartedAt DateTime?
+  heartbeatAt      DateTime?
+  activeTaskIds    String[]    @default([])
+  dismissedAt      DateTime?
+  handoffRef       String?
+  createdAt        DateTime    @default(now())
+  lastActiveAt     DateTime    @updatedAt
+
+  @@map("agents")
+}
+
+enum AgentType {
+  TENURE
+  TEMPORARY
+  USER
+}
+
+enum AgentRank {
+  ADMIN
+  OPERATOR
+  LEAD
+  AGENT
+}
+
+enum AgentStatus {
+  ONLINE
+  OFFLINE
+  CRASHED
+}
