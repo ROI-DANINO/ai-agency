@@ -39,6 +39,13 @@ export async function syncAgentToDb(
   profile: AgentProfile,
   sessionId: string,
 ): Promise<void> {
+  if ((profile.spawnedBy == null) !== (profile.scope == null)) {
+    throw new Error(
+      `Agent "${profile.slug}": spawnedBy and scope must both be set or both be absent ` +
+      `(got spawnedBy=${profile.spawnedBy ?? "undefined"}, scope=${profile.scope ?? "undefined"})`,
+    );
+  }
+
   const scopeValue = profile.scope
     ? (profile.scope.toUpperCase() as "TASK" | "PERSISTENT")
     : null;
@@ -66,6 +73,7 @@ export async function syncAgentToDb(
       sessionCount: 1,
     },
     update: {
+      type: profile.scope === "task" ? "TEMPORARY" : "TENURE",
       name: profile.name,
       meshRead: profile.mesh_read,
       meshWrite: profile.mesh_write,

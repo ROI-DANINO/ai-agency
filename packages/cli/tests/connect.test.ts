@@ -35,6 +35,7 @@ const mockProfile = {
   mesh_read: ["lead"],
   mesh_write: ["lead"],
   domain: "dev",
+  protected: false,
   body: "## Identity\n...",
 };
 
@@ -132,5 +133,20 @@ describe("syncAgentToDb — protected, spawned_by, scope", () => {
     expect(call.create.protected).toBe(false);
     expect(call.update.spawnedBy).toBe("dev-lead");
     expect(call.update.scope).toBe("TASK");
+    expect(call.update.protected).toBe(false);
+  });
+
+  it("throws when spawnedBy is set but scope is absent", async () => {
+    const badProfile = { ...subAgentProfile, scope: undefined as unknown as "task" };
+    await expect(syncAgentToDb(badProfile, "session-bad")).rejects.toThrow(
+      'spawnedBy and scope must both be set or both be absent',
+    );
+  });
+
+  it("throws when scope is set but spawnedBy is absent", async () => {
+    const badProfile = { ...subAgentProfile, spawnedBy: undefined };
+    await expect(syncAgentToDb(badProfile, "session-bad")).rejects.toThrow(
+      'spawnedBy and scope must both be set or both be absent',
+    );
   });
 });
