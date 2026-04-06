@@ -39,12 +39,16 @@ export async function syncAgentToDb(
   profile: AgentProfile,
   sessionId: string,
 ): Promise<void> {
+  const scopeValue = profile.scope
+    ? (profile.scope.toUpperCase() as "TASK" | "PERSISTENT")
+    : null;
+
   await prisma.agent.upsert({
     where: { slug: profile.slug },
     create: {
       slug: profile.slug,
       name: profile.name,
-      type: "TENURE",
+      type: profile.scope === "task" ? "TEMPORARY" : "TENURE",
       rank: profile.rank.toUpperCase() as "ADMIN" | "OPERATOR" | "LEAD" | "AGENT",
       specialty: profile.specialty ?? null,
       domain: profile.domain ?? null,
@@ -52,6 +56,9 @@ export async function syncAgentToDb(
       meshWrite: profile.mesh_write,
       modelTier: profile.model_tier,
       skillPack: profile.skill_pack,
+      protected: profile.protected,
+      spawnedBy: profile.spawnedBy ?? null,
+      scope: scopeValue,
       status: "ONLINE",
       currentSessionId: sessionId,
       sessionStartedAt: new Date(),
@@ -64,6 +71,9 @@ export async function syncAgentToDb(
       meshWrite: profile.mesh_write,
       modelTier: profile.model_tier,
       skillPack: profile.skill_pack,
+      protected: profile.protected,
+      spawnedBy: profile.spawnedBy ?? null,
+      scope: scopeValue,
       status: "ONLINE",
       currentSessionId: sessionId,
       sessionStartedAt: new Date(),
