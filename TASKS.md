@@ -1,5 +1,5 @@
 ---
-updated: 2026-04-05 · 19:46
+updated: 2026-04-06
 ---
 
 # Tasks
@@ -8,18 +8,26 @@ updated: 2026-04-05 · 19:46
 Phase 1 · Design → Build · Milestone 1 (/admin)
 Design: 3 of 10 sessions done (F08✓, F01✓, F02✓)
 Build: not started
-Bottleneck: F03 Skeleton Design needed before Milestone 1 build can start
+Tracks: Track 1 ✓ · Track 2 ✓ — plugin scaffold + skills surface live
 
 ## Now
-1. Skills cleanup Track 1 design — immediate; blocks establishing the plugin architecture for Track 2
-2. F03 Skeleton Design — next in build order; session-start, session-end, handoff, briefing pack
-3. F01 build plan — harmony passed; implementation plan not yet written
+1. **F03 Skeleton Design** — bottleneck for Milestone 1 build start
+   Define: session-start/end protocols, handoff artifact format, skill navigator rules,
+   minimal skills needed for Milestone 1. Design session needed.
+2. **F01 build plan** — harmony passed; implementation plan not yet written
+   Ready to write after F03 skeleton design locks the skill surface.
 
 ## Resume
-1. Skills & tooling cleanup (Track 1) — brainstormed; design session needed
-2. F01 build plan — harmony done; ready to write implementation plan
-3. F05 Skeleton Design — follows F03 in design sequence
+1. F05 Skeleton Design — follows F03 in design sequence
+2. F07 Light Design — async linear workflow model (not full DAG)
+3. F09 Light Design — HITL decision surfaces
 
 ## Open Questions
-- task-sync location (standalone plugin vs Track 2 ai-org plugin): blocks skills architecture
-- update-skills-map.sh hook vs tasks-dirty hook: potential conflict; Track 1 must resolve
+- None currently blocking. All track questions resolved.
+
+## Done
+- Track 1 (skills cleanup, clean slate) ✓ 2026-04-05
+- Track 2 (ai-org Claude Code plugin scaffold + 9 skills + deploy.sh) ✓ 2026-04-06
+- F08 Model Routing design ✓ 2026-04-03
+- F01 Agent Identity design ✓ 2026-04-04
+- F02 Team Structure design ✓ 2026-04-05
