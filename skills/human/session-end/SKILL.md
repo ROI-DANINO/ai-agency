@@ -26,15 +26,20 @@ go straight to Step 4.
 
 ## Step 2 — Write Journal Entry
 
+Get the current Israel time before writing:
+```bash
+TZ=Asia/Jerusalem date '+%Y-%m-%d · %H:%M'
+```
+
 Create a file at `journal/YYYY-MM-DD-{topic-slug}.md` where:
-- `YYYY-MM-DD` = today's date
+- `YYYY-MM-DD` = today's date (Israel)
 - `{topic-slug}` = 2–4 word kebab-case summary of the session topic
 
 Use this structure:
 
 ```markdown
 # {Title — what this session was about}
-Date: YYYY-MM-DD
+Date: YYYY-MM-DD · HH:MM IL
 Type: decision | plan | build | exploration
 
 ## What Happened

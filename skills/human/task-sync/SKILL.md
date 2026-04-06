@@ -22,11 +22,17 @@ Reads 4 sources, synthesizes current project state, writes TASKS.md.
 
 ## Write TASKS.md
 
+Before writing, get the current Israel time:
+```bash
+TZ=Asia/Jerusalem date '+%Y-%m-%d · %H:%M'
+```
+Use the output as the `updated` value.
+
 Overwrite `TASKS.md` with this exact structure:
 
 ```markdown
 ---
-updated: YYYY-MM-DD
+updated: YYYY-MM-DD · HH:MM IL
 ---
 
 # Tasks
