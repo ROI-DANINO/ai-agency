@@ -58,5 +58,5 @@ enum AgentStatus {
 
 enum AgentScope {
   TASK
-  TENURE
+  PERSISTENT
 }
