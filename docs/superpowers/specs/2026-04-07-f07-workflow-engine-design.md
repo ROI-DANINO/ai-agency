@@ -50,7 +50,7 @@ Human: /run-workflow "task description"
 | Node | Type | Responsibility |
 |---|---|---|
 | `orchestrator_node` | Agent call (Qwen via LiteLLM) | Decomposes task, writes TaskManifest to state |
-| `dispatcher_node` | Pure Python | Reads manifest DAG, resolves dependency order, calls Send() for ready Leads |
+| `dispatcher_node` | Pure Python | Reads manifest DAG, resolves dependency order, calls Send() for ready Leads. A REJECTED Lead is treated as a new DRAFT — re-spawned with original briefing + rejection notes; its dependents stay QUEUED until it completes and is approved. |
 | `lead_node` | Agent call via Hermes MCP | Spawns Lead session on configured runtime, writes to mesh |
 | `mesh_watcher` | Async coroutine (outside graph) | Monitors .mesh/ entries, injects state via checkpointer, triggers early HITL on blockers, signals dispatcher on early completions |
 | `collector_node` | Pure Python | Aggregates lead_node outputs, builds DecisionReport |
@@ -85,6 +85,7 @@ leads:
     tier: 2
     depends_on: []          # starts immediately
     gate: human             # output requires human approval before dependents unblock
+    max_retries: null       # null = use global default (3); set integer to override per-Lead
     queued_at: null
     started_at: null
     completed_at: null
@@ -127,14 +128,16 @@ leads:
     approved_at: null
 
 timeout_minutes: 30         # per Lead task
+max_retries: 3              # global default — Lead aborts to human gate after N rejections
 mesh_check_interval: 5      # minutes between mesh_watcher stall checks (Phase 2)
 
-# HITL log — appended as decisions are made
+# HITL log — one entry appended per gate decision (all 4 gate types)
 hitl_log:
-  - gate: manifest-approval
+  - gate: manifest-approval     # gate: manifest-approval | lead-output | blocker | final-synthesis | retry-limit
+    lead_id: null               # null for manifest-approval and final-synthesis
     presented_at: null
     decided_at: null
-    decision: null          # approved | rejected
+    decision: null              # approved | rejected | resolve | skip | abort | force-approve | change-goal | redirect
     notes: null
 ```
 
@@ -145,6 +148,7 @@ hitl_log:
 - Human can edit any field at Gate 1 before approving — change goals, swap models, add/remove depends_on
 - `model: auto` defers to F08 routing by tier. Phase 2 model library replaces `auto` with task-aware selection.
 - `runtime: auto` uses the runtime configured during the init interview. Can be pinned per Lead.
+- `timeout_minutes` and `max_retries` global defaults are set during the init interview and written to user config. The manifest inherits them; per-workflow or per-Lead overrides take precedence when set.
 
 ---
 
@@ -188,6 +192,10 @@ Inside each Lead session, Hermes loads relevant `.mesh/` context at session star
 
 All four gate types surface in Claude Code as skill prompts via `interrupt()` / `Command(resume=value)`.
 
+**Timeout behavior:** When `timeout_minutes` expires for a Lead, `mesh_watcher` treats it as a `blocker` event and Gate 3 fires with message "Lead timed out." Human decides: resolve (re-spawn), skip, or abort. Timeout is not an automatic failure.
+
+**Gate 1 retry limit:** If the Orchestrator's manifest is rejected `max_retries` times, the workflow stops with: *"Orchestrator could not produce an acceptable manifest after N attempts. Abort or edit the manifest manually."* Human can open the last manifest, edit it directly, and approve.
+
 ### Gate 1 — Manifest Approval (before work starts)
 Triggered by: `orchestrator_node` completing  
 Shows: task breakdown, Lead assignments, depends_on chain, gate types  
@@ -202,6 +210,17 @@ Options: `approve` (unblocks dependents) / `reject` (Lead retries with notes) / 
 Triggered by: `mesh_watcher` on a `blocker` event  
 Shows: which agent, blocker message, how long blocked, downstream impact  
 Options: `resolve` (provide value or instruction) / `skip` (Lead continues, logs gap) / `abort` (stop Lead, reschedule)
+
+**Resolve semantics:** `resolve` re-spawns the Lead session via Hermes with the original briefing + full `.mesh/` history for that Lead + the resolution note injected as context. The Lead resumes from where it blocked. The human never sees a restart — from their perspective the Lead just continued.
+
+**Parallel Lead behavior:** A blocker does not stop other running Leads. `mesh_watcher` writes a pending-blocker flag to the checkpointer; Gate 3 fires at the next natural graph pause point (when the current batch of lead_nodes completes). Independent Leads continue making progress while the human addresses the blocker.
+
+### Retry Limit Gate (any Lead, any gate)
+Triggered by: a Lead reaching `max_retries` rejections (default: 3)  
+Shows: Lead ID, goal, rejection history with all notes, retry count  
+Options: `abort` (remove Lead from workflow) / `change goal` (edit Lead goal and restart count) / `force approve` (override and accept current output)
+
+This gate fires instead of the normal retry. It is not an error — it is a decision surface. The workflow pauses until the human acts.
 
 ### Gate 4 — Final Synthesis (all Leads done)
 Triggered by: `collector_node` completing  
