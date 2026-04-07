@@ -1,31 +1,28 @@
 ---
-updated: 2026-04-07 · 02:36 IL
+updated: 2026-04-07 · 16:01 IL
 ---
 
 # Tasks
 
 ## Where We Are
 Phase 1 · Build · Milestone 1 (/admin)
-Design: 4 of 10 features locked (F08✓, F01✓, F02✓, F03✓)
-Build: F01 ✓ · F02 ✓ (branch ready to merge) · F03 next
-Hermes set up as coding tool (Qwen via OpenRouter)
+Design: 5 of 10 features locked (F08, F01, F02, F03, F07). Spec reviewed and patched (8 gaps fixed).
+Build: F01, F02, F03 complete and merged. F07 plan written — ready to build.
+Active: F07 Workflow Engine — implementation plan ready for agent dispatch.
 
 ## Now
-1. **Merge `build/f02-team-structure` to main** — F02 build complete, 14 tests passing, branch clean
-2. **F03 build** — design locked; read `docs/features/03-skills-system/` for spec, write build plan, execute
-3. **Design SOUL.md for Hermes** — placeholder written; proper design needed before Hermes sessions are productive
+1. **Execute F07 build** — dispatch `docs/superpowers/plans/2026-04-07-f07-workflow-engine.md` to dev agent via Hermes (or inline). 12 tasks, LangGraph TS, MockHermesClient stub. Done when `pnpm test` passes and `run-workflow` CLI command runs to Gate 1.
 
 ## Resume
-1. **F07 Light Design** — async linear workflow; design only what Milestone 1 needs; blocked until F03 build complete
-2. **Add `toolPack` to Agent schema** — `toolPack String[] @default([])` before F04 design begins; one migration now beats two later
+1. **F09 HITL Reporting design** — follows F07 build; reads from `.mesh/` and LangGraph state to build daily briefing surface.
+2. **Add `toolPack` to Agent schema** — blocked until F07/F09 scope settled.
 
 ## Open Questions
-- **Hermes vs LangGraph for sub-agent spawning** — does Hermes replace or sit alongside LangGraph for F07? Must decide before F07 design begins
-- **Superpowers reset** — still deferred; must decide before F03 build begins
+<!-- none -->
 
 ## Done
-- F02 Team Structure built — protected/spawnedBy/scope fields, 7 lead symlinks, .mesh/ scaffold, 14 tests ✓ 2026-04-07
-- F02 full agent roster written — 7 leads + 19 sub-agents, all profiles complete ✓ 2026-04-07
-- F01 merged to main — 16/16 tests passing ✓ 2026-04-07
-- F03 Skills System design locked — step-file architecture, workflow.md separation, skill:// protocol ✓ 2026-04-06
-- Track 2: ai-org plugin scaffold + deploy.sh ✓ 2026-04-06
+- F07 spec stress-tested, 8 gaps patched, implementation plan written ✓ 2026-04-07
+- F07 design locked — LangGraph+Hermes MCP model, mesh_watcher, HITL gates, retry limits ✓ 2026-04-07
+- F03 build complete — skills resolver, artifact writer, 5 CLI subcommands, 33 profiles, 44 tests ✓ 2026-04-07
+- F02 merged to main + superpowers artifacts cleaned ✓ 2026-04-07
+- F01 build complete — agent identity, profile schema, registry ✓ 2026-04-07
