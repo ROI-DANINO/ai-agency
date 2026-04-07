@@ -98,6 +98,10 @@ export interface DecisionReport {
 export const WorkflowStateAnnotation = Annotation.Root({
   threadId: Annotation<string>(),
   task: Annotation<string>(),
+  currentLeadId: Annotation<string>({
+    default: () => "",
+    reducer: (_prev, next) => next,
+  }),
   manifest: Annotation<TaskManifest | null>({
     default: () => null,
     reducer: (_prev, next) => next,
