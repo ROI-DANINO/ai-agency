@@ -66,12 +66,16 @@ Clear `.tasks-dirty` if present.
 
 Write the handoff to `journal/HANDOFF.md` (overwrite each time) AND output it to the user:
 
+Read the active milestone from the `## Milestones` table in `docs/FEATURE-MAP.md`
+before writing the handoff. Active = highest IN PROGRESS entry, or lowest PENDING
+entry if none are in progress.
+
 ```
 ---
 HANDOFF — {date} — {topic}
 
 Last session: {1 sentence summary}
-State: {current phase/milestone}
+State: {active milestone from FEATURE-MAP.md Milestones table, format: "Phase 1 · M2 · Executable (IN PROGRESS)"}
 Next: {top 1–2 items from TASKS.md Now}
 Key files: {2–3 files most relevant to continue the work}
 
