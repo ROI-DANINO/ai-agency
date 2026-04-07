@@ -55,6 +55,34 @@ gate condition, unlocks, and status.
 
 ---
 
+## Integration Points
+
+### TASKS.md — Where We Are
+The "Where We Are" section must reference the active milestone by M-number and name,
+derived from the FEATURE-MAP.md milestones table. Format:
+
+```
+Phase 1 · M2 · Executable
+```
+
+The task-sync process is responsible for keeping this current whenever feature
+statuses change. Replace the informal "Milestone 1 (/admin)" label with this pattern.
+
+### project-brief skill
+The "Where We Are" section must read the active milestone from the `## Milestones`
+table in FEATURE-MAP.md and display it as `Phase N · MN · Name`. Add explicit
+instruction to the skill to source this from FEATURE-MAP.md, not from TASKS.md alone.
+
+### session-end skill
+The handoff prompt `State:` line must include the active milestone name, sourced
+from the `## Milestones` table in FEATURE-MAP.md. Format:
+
+```
+State: Phase 1 · M2 · Executable (IN PROGRESS)
+```
+
+---
+
 ## Status Vocabulary
 
 | Status | Meaning |

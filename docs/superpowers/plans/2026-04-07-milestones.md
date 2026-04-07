@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add a formal `## Milestones` section to `docs/FEATURE-MAP.md` that defines five dependency-gate milestones across all three platform phases.
+**Goal:** Add a formal `## Milestones` section to `docs/FEATURE-MAP.md` and wire the active milestone into TASKS.md, project-brief, and session-end so the current milestone is visible across the full session lifecycle.
 
-**Architecture:** Single markdown edit — insert the Milestones section between the Phase Overview table and the Feature Registry table in `docs/FEATURE-MAP.md`. No code changes required.
+**Architecture:** Three markdown file edits + two skill file updates. FEATURE-MAP.md gets the milestones table. TASKS.md "Where We Are" adopts M-number format. The project-brief and session-end skills get explicit instructions to read and display the active milestone from FEATURE-MAP.md.
 
 **Tech Stack:** Markdown, git
 
@@ -58,4 +58,120 @@ Each milestone is a dependency gate — the point at which a new class of capabi
 ```bash
 git add docs/FEATURE-MAP.md
 git commit -m "feat: add milestones section to FEATURE-MAP.md — 5 dependency gates across 3 phases"
+```
+
+---
+
+### Task 2: Update TASKS.md active milestone format
+
+**Files:**
+- Modify: `TASKS.md` (Where We Are section)
+
+- [ ] **Step 1: Update the milestone reference**
+
+In `TASKS.md`, the "Where We Are" section currently reads:
+```
+Phase 1 · Build · Milestone 1 (/admin)
+```
+
+Replace with the M-number + name format derived from FEATURE-MAP.md:
+```
+Phase 1 · Build · M2 · Executable
+```
+
+The full updated "Where We Are" block:
+```markdown
+## Where We Are
+Phase 1 · Build · M2 · Executable
+Design: 5 of 10 features locked (F08, F01, F02, F03, F07). Spec reviewed and patched (8 gaps fixed).
+Build: F01, F02, F03, F07 complete and merged. 75 tests passing.
+Active: F09 HITL Reporting — next design target.
+```
+
+- [ ] **Step 2: Commit**
+
+```bash
+git add TASKS.md
+git commit -m "chore: adopt M-number milestone format in TASKS.md"
+```
+
+---
+
+### Task 3: Update project-brief skill to read active milestone from FEATURE-MAP.md
+
+**Files:**
+- Modify: `/home/roking/.claude/skills/project-brief/SKILL.md`
+
+- [ ] **Step 1: Update Step 2 — Read Current State**
+
+The current Step 2 reads:
+```markdown
+## Step 2 — Read Current State
+
+Read these files in order:
+1. `TASKS.md` — current bottlenecks, priorities, open questions
+2. `docs/FEATURE-MAP.md` — build order and feature status
+3. Most recent file in `journal/` (by date prefix) — what happened last session
+```
+
+Replace with:
+```markdown
+## Step 2 — Read Current State
+
+Read these files in order:
+1. `TASKS.md` — current bottlenecks, priorities, open questions
+2. `docs/FEATURE-MAP.md` — build order, feature status, and active milestone (read the `## Milestones` table; the active milestone is the highest IN PROGRESS entry, or the lowest PENDING entry if none are in progress)
+3. Most recent file in `journal/` (by date prefix) — what happened last session
+```
+
+- [ ] **Step 2: Update Step 3 — Where We Are**
+
+The current "Where We Are" bullet reads:
+```markdown
+- Phase + milestone (e.g. "Phase 1 · Milestone 1 · /admin")
+```
+
+Replace with:
+```markdown
+- Phase + active milestone from FEATURE-MAP.md Milestones table (format: "Phase 1 · M2 · Executable")
+```
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add /home/roking/.claude/skills/project-brief/SKILL.md
+git commit -m "feat(skills): project-brief reads active milestone from FEATURE-MAP.md"
+```
+
+---
+
+### Task 4: Update session-end skill to include active milestone in handoff
+
+**Files:**
+- Modify: `/home/roking/.claude/skills/session-end/SKILL.md`
+
+- [ ] **Step 1: Update the handoff prompt template**
+
+The current handoff template in Step 4 reads:
+```markdown
+State: {current phase/milestone}
+```
+
+Replace with:
+```markdown
+State: {active milestone from FEATURE-MAP.md Milestones table, format: "Phase 1 · M2 · Executable (IN PROGRESS)"}
+```
+
+Also add a note before the handoff template block:
+```markdown
+Read the active milestone from the `## Milestones` table in `docs/FEATURE-MAP.md`
+before writing the handoff. Active = highest IN PROGRESS entry, or lowest PENDING
+entry if none are in progress.
+```
+
+- [ ] **Step 2: Commit**
+
+```bash
+git add /home/roking/.claude/skills/session-end/SKILL.md
+git commit -m "feat(skills): session-end includes active milestone in handoff prompt"
 ```
