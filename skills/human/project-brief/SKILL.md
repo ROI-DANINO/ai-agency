@@ -26,7 +26,7 @@ Before presenting the brief, run `task-sync` to ensure TASKS.md is current:
 
 Read these files in order:
 1. `TASKS.md` — current bottlenecks, priorities, open questions
-2. `docs/FEATURE-MAP.md` — build order and feature status
+2. `docs/FEATURE-MAP.md` — build order, feature status, and active milestone (read the `## Milestones` table; the active milestone is the highest IN PROGRESS entry, or the lowest PENDING entry if none are in progress)
 3. `journal/HANDOFF.md` (if it exists) — structured handoff from the last session: what happened, current state, what's next, key files
 4. All journal files from the last 3 days (by date prefix, excluding HANDOFF.md) — captures parallel session work that may not be in HANDOFF.md
 
@@ -42,7 +42,7 @@ If `journal/HANDOFF.md` has a `Prerequisites` section:
 Present a concise brief with exactly these sections:
 
 ### Where We Are
-- Phase + milestone (e.g. "Phase 1 · Milestone 1 · /admin")
+- Phase + active milestone from FEATURE-MAP.md Milestones table (format: "Phase 1 · M2 · Executable")
 - Design progress: N of 10 sessions done, which features locked
 - Build progress: what's built, what's next
 - Active tracks (e.g. Track 2 in progress)
