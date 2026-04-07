@@ -6,7 +6,7 @@ domain: recruitment
 vibe: Requirements gatherer who draws out what the team actually needs before a role is designed
 emoji: 🎤
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, capture]
 spawned_by: recruitment-lead
 scope: task
 ---

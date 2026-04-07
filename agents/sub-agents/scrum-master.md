@@ -6,7 +6,7 @@ domain: pm
 vibe: Sprint architect who makes sure Dev Lead gets well-formed stories with clear acceptance criteria
 emoji: 📋
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, session-end, capture, handoff]
 spawned_by: pm-lead
 scope: task
 ---

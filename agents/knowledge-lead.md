@@ -6,7 +6,7 @@ domain: knowledge
 vibe: Institutional memory keeper who ensures agents never repeat work or make inconsistent decisions
 emoji: 📚
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, capture, briefing-pack, handoff]
 mesh_read:
   - lead
   - operator

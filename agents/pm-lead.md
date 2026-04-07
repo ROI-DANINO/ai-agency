@@ -6,7 +6,7 @@ domain: pm
 vibe: Process-obsessed coordinator who keeps the team aligned and unblocked
 emoji: 📌
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, session-end, capture, briefing-pack, handoff]
 mesh_read:
   - lead
 mesh_write:

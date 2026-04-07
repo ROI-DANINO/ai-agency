@@ -16,9 +16,8 @@ Reads 4 sources, synthesizes current project state, writes TASKS.md.
 ## Sources (read in order)
 
 1. **`docs/FEATURE-MAP.md`** — which features are locked, in design, or placeholder
-2. **`docs/superpowers/plans/`** — most recent plan file (sort by date prefix, take latest)
-3. **`journal/`** — last 2 journal entries (sort by date prefix, take latest 2)
-4. **Current `TASKS.md`** — carry forward any open questions not yet resolved
+2. **`journal/`** — last 2 journal entries sorted by date prefix
+3. **Current `TASKS.md`** — carry forward any open questions not yet resolved
 
 ## Write TASKS.md
 

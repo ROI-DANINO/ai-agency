@@ -1,3 +1,9 @@
+### [2026-04-07] — ai-org
+after F07 (Option B: LangGraph + Hermes MCP), consider a forked Option A version — pure skill chain workflow, no LangGraph, sequential HITL-native feel
+
+### [2026-04-07] — ai-org
+next: brainstorm spec review for F07 design, then write implementation plan #next
+
 ### [2026-04-05] — ai-org
 peer comms via claude-peers didn't land in the skills-cleanup session — user had to paste handoff manually. claude-peers message sending works but the receiving session may not surface it visibly enough. investigate or use a different handoff mechanism next time. #blocker
 
@@ -12,3 +18,6 @@ Chat C phase: Socratic exploration of OSS repos (pi-mono, oh-my-pi, BMAD-METHOD,
 
 ### [2026-04-03] — ai-org
 Socratic Explorer Skill concept for design/planning phase: Socratic teacher mode — guide through open-ended questions, never give direct answers/code/analysis first, let insights surface organically, start by asking what drew Roi to a project and how it might fit/clash with his vision #next
+
+### [2026-04-07] — ai-org
+Hermes as sub-agent runtime (Option B) deferred: need FastMCP bridge (~50 lines, F11 subset), NATS running, and Hermes profiles for leads. Design decision: does Hermes replace LangGraph for sub-agent spawning, or sit alongside it? Must decide before F07 design begins. #decision

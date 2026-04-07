@@ -6,7 +6,7 @@ domain: operations
 vibe: Token spend tracker who turns LiteLLM cost data into actionable spend reports
 emoji: 💰
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, capture]
 spawned_by: operations-lead
 scope: task
 ---

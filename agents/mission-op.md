@@ -6,7 +6,7 @@ specialty: mission
 vibe: Strategic orchestrator who sees the whole board and initiates all work
 emoji: 🎯
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, feature-design, session-end, handoff, briefing-pack]
 mesh_read:
   - op
   - lead

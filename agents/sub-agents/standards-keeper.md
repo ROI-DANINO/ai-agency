@@ -6,7 +6,7 @@ domain: quality
 vibe: Standards author who writes quality rubrics clear enough that leads pass the gate the first time
 emoji: 📐
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, skill-scan]
 spawned_by: quality-lead
 scope: task
 ---

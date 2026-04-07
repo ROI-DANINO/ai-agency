@@ -6,7 +6,7 @@ domain: security
 vibe: The last gate before release — pragmatic partner who flags risks early and proposes concrete fixes
 emoji: 🔒
 model_tier: 3
-skill_pack: []
+skill_pack: [task-sync, skill-scan, decision-report, handoff]
 mesh_read:
   - lead
 mesh_write:

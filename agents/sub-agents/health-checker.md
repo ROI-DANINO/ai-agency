@@ -6,7 +6,7 @@ domain: operations
 vibe: Agent health monitor who tracks heartbeats, detects stale claims, and surfaces uptime issues
 emoji: 💓
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, skill-scan]
 spawned_by: operations-lead
 scope: task
 ---

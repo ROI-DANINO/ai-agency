@@ -2,8 +2,6 @@ import { describe, it, expect } from "vitest";
 import { parseManifest, serializeManifest, getReadyLeads, appendHitlLog, resolveMaxRetries } from "../../src/workflow/manifest.js";
 import type { TaskManifest, LeadTask } from "../../src/workflow/state.js";
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
-
 function makeLead(overrides: Partial<LeadTask> & { id: string }): LeadTask {
   return {
     goal: "Do something",
@@ -39,11 +37,9 @@ function makeManifest(leads: LeadTask[]): TaskManifest {
   };
 }
 
-// ─── parseManifest ─────────────────────────────────────────────────────────────
-
 describe("parseManifest", () => {
   it("parses a valid YAML manifest", () => {
-    const yaml = `
+    const yml = `
 task: Build login page
 thread_id: wf-2026-04-07-001
 requested_by: human
@@ -70,13 +66,13 @@ max_retries: 3
 mesh_check_interval: 5
 hitl_log: []
 `;
-    const manifest = parseManifest(yaml);
+    const manifest = parseManifest(yml);
     expect(manifest.task).toBe("Build login page");
     expect(manifest.threadId).toBe("wf-2026-04-07-001");
     expect(manifest.leads).toHaveLength(1);
-    expect(manifest.leads[0].id).toBe("ux-lead");
-    expect(manifest.leads[0].dependsOn).toEqual([]);
-    expect(manifest.leads[0].gate).toBe("human");
+    expect(manifest.leads[0]!.id).toBe("ux-lead");
+    expect(manifest.leads[0]!.dependsOn).toEqual([]);
+    expect(manifest.leads[0]!.gate).toBe("human");
     expect(manifest.maxRetries).toBe(3);
   });
 
@@ -85,19 +81,15 @@ hitl_log: []
   });
 });
 
-// ─── serializeManifest ─────────────────────────────────────────────────────────
-
 describe("serializeManifest", () => {
   it("round-trips through YAML", () => {
     const original = makeManifest([makeLead({ id: "ux-lead" })]);
     const yml = serializeManifest(original);
     const parsed = parseManifest(yml);
     expect(parsed.task).toBe(original.task);
-    expect(parsed.leads[0].id).toBe("ux-lead");
+    expect(parsed.leads[0]!.id).toBe("ux-lead");
   });
 });
-
-// ─── getReadyLeads ─────────────────────────────────────────────────────────────
 
 describe("getReadyLeads", () => {
   it("returns DRAFT leads with no dependencies", () => {
@@ -145,8 +137,6 @@ describe("getReadyLeads", () => {
   });
 });
 
-// ─── resolveMaxRetries ─────────────────────────────────────────────────────────
-
 describe("resolveMaxRetries", () => {
   it("uses lead max_retries when set", () => {
     const lead = makeLead({ id: "x", maxRetries: 5 });
@@ -161,8 +151,6 @@ describe("resolveMaxRetries", () => {
   });
 });
 
-// ─── appendHitlLog ─────────────────────────────────────────────────────────────
-
 describe("appendHitlLog", () => {
   it("appends an entry to hitl_log", () => {
     const manifest = makeManifest([]);
@@ -175,7 +163,7 @@ describe("appendHitlLog", () => {
       notes: null,
     });
     expect(updated.hitlLog).toHaveLength(1);
-    expect(updated.hitlLog[0].decision).toBe("approved");
+    expect(updated.hitlLog[0]!.decision).toBe("approved");
   });
 
   it("does not mutate the original manifest", () => {

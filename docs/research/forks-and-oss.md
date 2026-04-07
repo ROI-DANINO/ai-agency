@@ -120,6 +120,7 @@ Total estimated custom code: **~580 lines** across 7 components. Everything else
 | `ai-team` | Reference for agent role definitions, not a codebase. Copy agent markdown files, not a fork. |
 | `aios` | Personal system with different goals. Study patterns, don't fork. Reimplement ideas cleanly. |
 | `ai-org` | This IS the new project. Build here, don't fork. |
+| `superpowers` (Claude Code plugin) | Claude Code-specific plugin for enhanced defaults, session management, and project context patterns. Claude Code is being replaced by Hermes as the primary coding agent. Study its default templates and session lifecycle conventions for inspiration when designing Hermes behavior skills. |
 | Flowise | Visual flow builder — wrong shape for agent management platform. |
 | Dify | "Build an LLM app" paradigm — constrains architecture, doesn't accelerate it. License has non-Apache terms. |
 | Temporal | Right for Phase 3 multi-machine; overkill for Phase 1 local. Note migration path. |
@@ -189,3 +190,4 @@ Total estimated custom code: **~580 lines** across 7 components. Everything else
 | impeccable as reference for Features 03 + 12 | Domain-specific command-over-description discipline maps to skill frontmatter design; study before finalising Feature 03 spec and UI design language | 2026-04-06 |
 | heretic: reference only, local Ollama models only | Abliteration valid for internal Ollama models that refuse agent tasks; never apply to production API models; relevant to Feature 08 local model config | 2026-04-06 |
 | nanochat: defer to Phase 3+ | Fine-tuning custom agent models not needed until platform is stable; reference only for future model training work | 2026-04-06 |
+| Model tiers: not restricted to free | Use best model for role regardless of cost. Tier 2 (leads) = qwen/qwen3.6-plus:free. Security Lead = deepseek/deepseek-chat-v3.1:free. OpenRouter pricing researched for paid tier upgrades. | 2026-04-07 |

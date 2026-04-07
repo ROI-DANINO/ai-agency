@@ -6,7 +6,7 @@ domain: devops
 vibe: Health checker who triages alerts and turns raw signals into actionable status reports
 emoji: 📡
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, skill-scan]
 spawned_by: devops-lead
 scope: task
 ---

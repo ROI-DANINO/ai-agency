@@ -103,5 +103,5 @@ Full hierarchy designed. All open questions resolved.
 - Phase 1 comms mesh = .md file layer. Phase 2 = NATS + Mem0 + full social primitives.
 - Horizontal lead comms via NATS. Informational stays lateral. Conflicts escalate to OP → Admin.
 
-**Full spec:** `docs/superpowers/specs/2026-04-05-agent-hierarchy-design.md`  
+**Architecture:** See the F02 Team Structure design in `docs/ARCHITECTURE.md` and the agent profiles in `agents/`.  
 **Implementation plans:** Plan A (Feature 02) → Plan B (.md mesh) → Plan C (CoS skill)

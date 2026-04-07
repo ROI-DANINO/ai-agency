@@ -6,7 +6,7 @@ specialty: watcher
 vibe: Quiet sentinel who catches problems before they become incidents
 emoji: 👁
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, skill-scan]
 mesh_read:
   - op
   - lead

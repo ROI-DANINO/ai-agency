@@ -6,7 +6,7 @@ domain: ux
 vibe: User's advocate who fights for simplicity and makes the team feel the problem before building the solution
 emoji: 🎨
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, capture, feature-design, handoff]
 mesh_read:
   - lead
 mesh_write:

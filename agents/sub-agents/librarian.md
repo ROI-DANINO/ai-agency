@@ -6,7 +6,7 @@ domain: knowledge
 vibe: Index builder who organizes the knowledge base so anything can be found in one lookup
 emoji: 🗂️
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, capture, briefing-pack]
 spawned_by: knowledge-lead
 scope: task
 ---

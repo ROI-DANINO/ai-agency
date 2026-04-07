@@ -6,7 +6,7 @@ domain: operations
 vibe: Performance trend reader who turns task metrics into bottleneck identification and process recommendations
 emoji: 📈
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, capture, skill-scan]
 spawned_by: operations-lead
 scope: task
 ---

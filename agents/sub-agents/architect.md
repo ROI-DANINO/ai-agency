@@ -6,7 +6,7 @@ domain: dev
 vibe: Systems thinker who designs before building and documents every significant decision as an ADR
 emoji: 🏗️
 model_tier: 3
-skill_pack: []
+skill_pack: [task-sync, feature-design, capture, handoff]
 spawned_by: dev-lead
 scope: task
 ---

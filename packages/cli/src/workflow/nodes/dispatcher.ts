@@ -1,4 +1,3 @@
-import { Send } from "@langchain/langgraph";
 import { getReadyLeads } from "../manifest.js";
 import type { WorkflowState, TaskManifest } from "../state.js";
 
@@ -39,36 +38,34 @@ export function applyLeadRejection(
 // ─── LangGraph node ────────────────────────────────────────────────────────────
 
 /**
- * dispatcherNode — reads the manifest DAG, sends each ready lead to lead_node.
- * Returns Send[] for LangGraph fan-out. Routes to collector_node if no leads are ready.
+ * dispatcherNode — reads the manifest DAG, marks ready leads as QUEUED,
+ * sets currentLeadId to the first ready lead for the lead_node to process.
+ * The graph edges handle routing: → lead_node if ready leads exist, → collector otherwise.
  */
 export async function dispatcherNode(
   state: WorkflowState,
-): Promise<Send[] | { manifest: TaskManifest }> {
+): Promise<Partial<WorkflowState>> {
   const manifest = state.manifest!;
-  const readyIds = resolveDispatch(manifest);
+  const readyIds = getReadyLeads(manifest);
 
   if (readyIds.length === 0) {
-    // Nothing more to dispatch — collector will handle synthesis
+    // Nothing to dispatch
     return { manifest };
   }
 
-  // Mark ready leads as QUEUED
+  // Mark first ready lead as QUEUED and set as current
+  const lead = readyIds[0]!;
   const updatedManifest: TaskManifest = {
     ...manifest,
-    leads: manifest.leads.map((lead) =>
-      readyIds.includes(lead.id)
-        ? { ...lead, status: "QUEUED", queuedAt: new Date().toISOString() }
-        : lead,
+    leads: manifest.leads.map((l) =>
+      l.id === lead.id
+        ? { ...l, status: "QUEUED", queuedAt: new Date().toISOString() }
+        : l,
     ),
   };
 
-  return readyIds.map(
-    (leadId) =>
-      new Send("lead_node", {
-        ...state,
-        manifest: updatedManifest,
-        currentLeadId: leadId,
-      }),
-  );
+  return {
+    manifest: updatedManifest,
+    currentLeadId: lead.id,
+  };
 }

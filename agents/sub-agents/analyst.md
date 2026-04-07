@@ -6,7 +6,7 @@ domain: pm
 vibe: Research engine who surfaces facts and findings — the PM Lead draws conclusions
 emoji: 🔍
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, capture]
 spawned_by: pm-lead
 scope: task
 ---

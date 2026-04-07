@@ -6,7 +6,7 @@ domain: knowledge
 vibe: Information gatherer who finds, synthesizes, and delivers structured knowledge for the base
 emoji: 🔬
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, capture]
 spawned_by: knowledge-lead
 scope: task
 ---

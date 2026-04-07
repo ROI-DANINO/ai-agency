@@ -97,6 +97,6 @@ describe("applyLeadRejection", () => {
       makeLead({ id: "ux-lead", status: "COMPLETED" }),
     ]);
     applyLeadRejection(manifest, "ux-lead", "retry");
-    expect(manifest.leads[0].status).toBe("COMPLETED");
+    expect(manifest.leads[0]!.status).toBe("COMPLETED");
   });
 });

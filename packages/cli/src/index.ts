@@ -3,7 +3,9 @@ import { Command } from "commander";
 import { connect as natsConnect } from "nats";
 import { AgentRegistry, REGISTRY_BUCKET } from "@ai-org/broker";
 import { readProfile, profilePath } from "./profile.js";
-import { buildConnectAction, syncAgentToDb, releaseAgentFromDb } from "./commands/connect.js";
+import { buildConnectAction, syncAgentToDb, releaseAgentFromDb, injectSkills } from "./commands/connect.js";
+import { createSkillsCommand } from "./commands/skills.js";
+import { createRunWorkflowCommand } from "./commands/run-workflow.js";
 import { startHeartbeat } from "./heartbeat.js";
 import { randomUUID } from "crypto";
 import { resolve } from "path";
@@ -59,6 +61,9 @@ program
     // Sync to Prisma DB
     await syncAgentToDb(profile, peerId);
 
+    // Inject skills into system prompt
+    await injectSkills(profile, REPO_ROOT);
+
     const { stop } = startHeartbeat(registry, slug, peerId);
 
     console.log(`\n✓ Connected as ${profile.emoji} ${profile.name} [${slug}]`);
@@ -78,5 +83,8 @@ program
     process.on("SIGINT", shutdown);
     process.on("SIGTERM", shutdown);
   });
+
+program.addCommand(createSkillsCommand());
+program.addCommand(createRunWorkflowCommand());
 
 program.parse();

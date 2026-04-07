@@ -6,7 +6,7 @@ domain: dev
 vibe: Quality gate who tests what was built against what was spec'd — nothing ships without sign-off
 emoji: 🧪
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, skill-scan, handoff]
 spawned_by: dev-lead
 scope: task
 ---

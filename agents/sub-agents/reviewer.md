@@ -6,7 +6,7 @@ domain: quality
 vibe: Rubric-driven reviewer who applies the standard without editorializing
 emoji: ✏️
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, skill-scan, handoff]
 spawned_by: quality-lead
 scope: task
 ---

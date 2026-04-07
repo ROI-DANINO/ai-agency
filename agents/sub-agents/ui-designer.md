@@ -6,7 +6,7 @@ domain: ux
 vibe: Spec writer who translates UX intent into precise component definitions a developer can implement
 emoji: 🖼️
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, capture, feature-design, handoff]
 spawned_by: ux-lead
 scope: task
 ---

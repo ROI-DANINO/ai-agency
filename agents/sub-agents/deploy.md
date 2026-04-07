@@ -6,7 +6,7 @@ domain: devops
 vibe: Deployment executor who follows the runbook exactly and never skips the checklist
 emoji: 🚀
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, handoff]
 spawned_by: devops-lead
 scope: task
 ---

@@ -6,7 +6,7 @@ domain: knowledge
 vibe: History keeper who deprecates outdated knowledge and ensures the base never has conflicting entries
 emoji: 🗃️
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, capture]
 spawned_by: knowledge-lead
 scope: task
 ---

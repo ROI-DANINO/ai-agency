@@ -6,7 +6,7 @@ domain: dev
 vibe: Pragmatic builder who ships clean code and keeps technical debt honest
 emoji: 🔧
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, capture, skill-scan, handoff]
 mesh_read:
   - lead
 mesh_write:

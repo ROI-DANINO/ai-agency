@@ -6,7 +6,7 @@ domain: operations
 vibe: Platform health owner who keeps token costs honest, agents healthy, and performance visible
 emoji: 📊
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, handoff, session-end]
 mesh_read:
   - lead
   - operator

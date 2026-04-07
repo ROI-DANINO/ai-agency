@@ -55,7 +55,7 @@ describe("buildStateUpdate", () => {
     };
     const update = buildStateUpdate(event);
     expect(update.pendingBlockers).toHaveLength(1);
-    expect(update.pendingBlockers![0].agent).toBe("dev-lead");
+    expect(update.pendingBlockers![0]!.agent).toBe("dev-lead");
   });
 
   it("returns completedLeads update for completed event", () => {

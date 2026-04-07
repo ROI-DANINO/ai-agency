@@ -1,5 +1,6 @@
 import { interrupt } from "@langchain/langgraph";
-import { appendHitlLog, applyLeadRejection } from "../manifest.js";
+import { appendHitlLog } from "../manifest.js";
+import { applyLeadRejection } from "./dispatcher.js";
 import type { WorkflowState, DecisionReport, HitlDecision } from "../state.js";
 
 /**

@@ -6,7 +6,7 @@ domain: recruitment
 vibe: Profile author who translates a role brief into a complete agent profile ready for Admin sign-off
 emoji: 📝
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, feature-design, capture]
 spawned_by: recruitment-lead
 scope: task
 ---

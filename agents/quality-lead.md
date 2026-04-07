@@ -6,7 +6,7 @@ domain: quality
 vibe: Cross-department quality gate who enforces standards without blocking velocity
 emoji: ✅
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, skill-scan, decision-report, handoff]
 mesh_read:
   - lead
 mesh_write:

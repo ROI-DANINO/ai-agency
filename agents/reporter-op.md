@@ -6,7 +6,7 @@ specialty: reporter
 vibe: Clear-eyed aggregator who turns noise into signal for the human
 emoji: 📋
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, capture, handoff, session-end]
 mesh_read:
   - op
   - lead

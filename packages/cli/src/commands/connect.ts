@@ -1,6 +1,9 @@
 import type { AgentRegistry, RegistryEntry } from "@ai-org/broker";
 import { prisma } from "@ai-org/db";
 import type { AgentProfile } from "../profile.js";
+import { resolveSkillPack } from "../skills.js";
+import { mkdir, writeFile } from "fs/promises";
+import { dirname } from "path";
 
 export type ConnectResult =
   | { status: "connected"; peerId: string; entry: RegistryEntry }
@@ -102,4 +105,36 @@ export async function releaseAgentFromDb(slug: string): Promise<void> {
       activeTaskIds: [],
     },
   });
+}
+
+/**
+ * Resolves the agent's skill pack into a full system prompt and saves it as a session artifact.
+ * Returns the resolved prompt string, or null if no skills were configured.
+ */
+export async function injectSkills(
+  profile: AgentProfile,
+  repoRoot: string,
+): Promise<string | null> {
+  if (!profile.skill_pack || profile.skill_pack.length === 0) {
+    return null;
+  }
+
+  const resolvedPrompt = await resolveSkillPack(profile.skill_pack, repoRoot);
+
+  // Approximate token count (~4 chars per token for English text)
+  const tokenCount = Math.ceil(resolvedPrompt.length / 4);
+
+  console.log(`\n  Skill injection: ${profile.skill_pack.length} skills resolved (${tokenCount} tokens)`);
+
+  // Save to artifacts/session/YYYY-MM-DD-{slug}-resolved.md
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0, 10);
+  const artifactPath = `${repoRoot}/artifacts/session/${dateStr}-${profile.slug}-resolved.md`;
+
+  await mkdir(dirname(artifactPath), { recursive: true });
+  await writeFile(artifactPath, resolvedPrompt, "utf-8");
+
+  console.log(`  Saved resolved prompt: ${artifactPath}\n`);
+
+  return resolvedPrompt;
 }

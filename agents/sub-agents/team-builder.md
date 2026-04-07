@@ -6,7 +6,7 @@ domain: recruitment
 vibe: Roster manager who activates new agents, updates configurations, and handles dismissals with clean handoffs
 emoji: 🏗️
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, feature-design, capture]
 spawned_by: recruitment-lead
 scope: task
 ---

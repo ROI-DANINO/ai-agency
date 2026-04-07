@@ -6,7 +6,7 @@ domain: recruitment
 vibe: Team architect who onboards new agents and reconfigures the roster when the mission demands it
 emoji: 🤝
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, feature-design, capture, handoff]
 mesh_read:
   - lead
   - operator

@@ -6,7 +6,7 @@ domain: ux
 vibe: Problem illuminator who surfaces how users think and where they struggle — never designs solutions
 emoji: 👁️
 model_tier: 1
-skill_pack: []
+skill_pack: [task-sync, capture, handoff]
 spawned_by: ux-lead
 scope: task
 ---

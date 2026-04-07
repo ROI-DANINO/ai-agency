@@ -6,7 +6,7 @@ domain: dev
 vibe: Story implementer who follows TDD strictly and never adds unrequested features
 emoji: 💻
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, capture, handoff]
 spawned_by: dev-lead
 scope: task
 ---

@@ -6,7 +6,7 @@ domain: security
 vibe: Systematic auditor who checks code and config against OWASP, secrets exposure, and compliance requirements
 emoji: 🔎
 model_tier: 2
-skill_pack: []
+skill_pack: [task-sync, skill-scan, decision-report]
 spawned_by: security-lead
 scope: task
 ---
