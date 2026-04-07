@@ -14,6 +14,20 @@ Master registry of all platform features. Each feature has its own directory und
 
 ---
 
+## Milestones
+
+Each milestone is a dependency gate — the point at which a new class of capability unlocks and makes the next phase of work possible.
+
+| # | Name | Features | Gate | Unlocks | Status |
+|---|---|---|---|---|---|
+| M1 | Runnable | F08 + F01 + F02 | Agents have stable identity, model routing is wired, a team can be defined with a hierarchy | Work can be dispatched to a structured team | COMPLETE |
+| M2 | Executable | F07 + F09 | A workflow runs end-to-end — task decomposition, lead dispatch, sub-agent execution, HITL decision surfaced to human | The core interaction loop — the platform does something meaningful | IN PROGRESS |
+| M3 | Capable | F03 + F04 + F05 | Agents have skills (reusable prompt templates), tools (MCP), and persistent memory across sessions | Agents that can do real work, not just execute workflow scaffolding | PENDING |
+| M4 | Observable | F10–F13 | Web platform operational — runs visible in browser, agents configurable via UI, decision reports reviewable without terminal | Platform usable by non-technical stakeholders; multi-client operation | STUB |
+| M5 | Distributable | F15 | Desktop app wraps all layers — native, offline-capable, ships as an installable | Consumer-grade distribution; first-class local experience | STUB |
+
+---
+
 ## Feature Registry
 
 | # | Feature | Phase | Layer | Priority | Depends On | Status |
@@ -21,7 +35,7 @@ Master registry of all platform features. Each feature has its own directory und
 | 08 | [Model Routing](features/08-model-routing/README.md) | 1 | Cross | Critical | — | DESIGNED |
 | 01 | [Agent Identity & Profiles](features/01-agent-identity/README.md) | 1 | CLI | Critical | — | BUILDING |
 | 02 | [Team Structure & Hierarchy](features/02-team-structure/README.md) | 1 | CLI | Critical | 01 | DESIGNED |
-| 07 | [Workflow Engine](features/07-workflow-engine/README.md) | 1 | CLI | Critical | 02 | PLACEHOLDER |
+| 07 | [Workflow Engine](features/07-workflow-engine/README.md) | 1 | CLI | Critical | 02 | BUILT |
 | 09 | [HITL Reporting](features/09-hitl-reporting/README.md) | 1 | Cross | Critical | 07 | PLACEHOLDER |
 | 03 | [Skills System](features/03-skills-system/README.md) | 1 | CLI | Critical | 02 | DESIGNED |
 | 04 | [Tools Layer](features/04-tools-layer/README.md) | 1 | CLI | Critical | 01 | PLACEHOLDER |
